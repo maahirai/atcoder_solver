@@ -33,7 +33,7 @@ int main(){
 
     int x,a,b,out;
     cin>>x>>a>>b;
-    out=x-a*b;
+    out=(x-a)%b;
     cout<<out<<endl;
     return 0;
 }
