@@ -27,5 +27,3 @@ int main(){
     cout<<ans-temp<<endl;
     return 0;
 }
-
-
