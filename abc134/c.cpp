@@ -21,7 +21,7 @@ int main(){
     int largest=b.at(0);
     int second=b.at(1);
     rep(i,n){
-        if(a.at(i)==b.at(0))cout<<second<<endl;
+        if(a.at(i)==largest)cout<<second<<endl;
         else cout<<largest<<endl;
     }
     return 0;
