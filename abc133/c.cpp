@@ -18,7 +18,7 @@ int main(){
     ll smallest=2019;
     for(ll i=l;i<r;i++){
         for(ll j=i+1;j<=r;j++){
-        if((!(i%2019))||(!(j%2019)))cout<<0<<endl;
+        if((!(i%2019))||(!(j%2019))){cout<<0<<endl; return 0;}
         else{
             ll temp=(i*j)%2019;
             if(smallest>temp){
