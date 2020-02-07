@@ -32,7 +32,7 @@ int main(){
         }
     vector<int> sum_prime(maxr+3,0);
     for(int i=0;i<=maxr+1;i++){
-    //s_{i+1}=s_{i}+islikenum(i+1);
+    //s_{i+1}=s_{i}+islikenum(i);
     sum_prime[i+1]=sum_prime[i]+(i%2&&isprime(i)&&isprime((i+1)/2));
     }
     rep(i,q){
