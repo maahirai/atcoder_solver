@@ -21,14 +21,13 @@ int main(){
     }
     ll ans=0;
     sort(l.begin(),l.end());
-    for(int longest=n-1;longest>1;longest--){
-      for(int middle=longest-1;middle>0;middle--){
-        for(int shortest=middle-1;shortest>=0;shortest--){
-                if(l[shortest]+l[middle]<=l[longest])break;
-                else ans++;
+    for(int mid=n-1;mid>=1;mid--){
+      for(int low=mid-1;low>=0;low--){
+          auto iter=lower_bound(l.begin(),l.end(),l[mid]+l[low]);
+          ll ng=distance(iter,l.end());
+                 ans+=n-1-mid-ng;
             }
         }
-    }
     cout<<ans<<endl;
     return 0;
 }
