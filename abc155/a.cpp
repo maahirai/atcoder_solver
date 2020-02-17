@@ -13,17 +13,19 @@ template<class T> inline T lcm(T x,T y){return x/gcd(x,y)*y;}
 
 long long INF = 1LL<<60;
 int main(){
-    int a,b,c;
-    cin>>a>>b>>c;
-    if(a==b||a==c||b==c){
-        if(a==b&&b==c)cout<<"No"<<endl;
-        else {
-            cout<<"Yes"<<endl;
+    int a[3];
+    bool yes=false;
+    rep(i,3)cin>>a[i];
+    rep(i,3){
+        rep(j,3){
+            if(i==j)continue;
+            if(a[i]==a[j]){
+                if(a[3-(i+j)]!=a[i])yes=true;
+            }
         }
     }
-    else{
-        cout<<"No"<<endl;
-    }
+    if(yes)cout<<"Yes"<<endl;
+    else cout<<"No"<<endl;
     return 0;
 }
 
