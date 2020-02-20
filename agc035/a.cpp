@@ -16,33 +16,51 @@ template<class T> inline T lcm(T x,T y){return x/gcd(x,y)*y;}
 
 long long INF = 1LL<<60;
 int main(){
-    string s;
-    ll k;
-    cin>>s>>k;
-    ll ans=0;
-    string tmp=s;
-    rep(i,tmp.size()-1){
-        if(tmp.at(i)==tmp.at(i+1)){
-            tmp.at(i+1)='0';ans++;
+    int n;
+    cin>>n;
+    vector<int> a(n);
+    rep(i,n)cin>>a[i];
+    bool che=true;
+    unordered_map<int,int> cnt;
+    rep(i,n)cnt[a[i]]++;
+    if(cnt.size()>3)che=false;
+    else if(cnt.size()==3){
+        if(n%3)che=false;
+        int v[cnt.size()];
+        int k[cnt.size()];
+        int i=0;
+        for(auto it=cnt.begin();it!=cnt.end();it++){
+            v[i]=it->second;
+            k[i]=it->first;
+            i++;
         }
+        if((v[0]!=v[1]||v[1]!=v[2])){
+           che=false;
+        }
+        int tmp=0;
+        rep(i,cnt.size())tmp^=k[i];
+        if(tmp!=0)che=false;
     }
-    ans*=k;
-    if(s.at(s.size()-1)==s.at(0)){
-        char kind=s.at(0);
-        int front=0,back=s.size()-1;
-        int cfront=0,cback=0;
-        while(front+cfront<s.size()&&s.at(front+cfront)==kind){
-            cfront++;
+    else if(cnt.size()==2){
+        if(n%3)che=false;
+        int v[2];
+        int i=0;
+        bool zero=false;
+        for(auto it=cnt.begin();it!=cnt.end();it++){
+            if(it->first==0)zero=true;
+            v[i++]=it->second;
         }
-        while(back-cback>=0&&s.at(back-cback)==kind){
-            cback++;
-        }
-        if(cfront==cback&&cfront==s.size()&&s.size()%2){
-            ans+=k/2;
-        }
-        else ans+=(ll)((cfront+cback)/2-(cfront/2+cback/2))*(k-1);
+        if(!zero){che=false;}
+        if(che&&!((2*v[1]==v[0])||(2*v[0]==v[1]))){che=false;}
     }
-    cout<<ans<<endl;
+    else if(cnt.size()==1){
+        if(cnt.begin()->first!=0)che=false;
+    }
+
+    if(che)cout<<"Yes"<<endl;
+    else {
+        cout<<"No"<<endl;
+    }
     return 0;
 }
 
