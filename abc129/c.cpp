@@ -1,34 +1,48 @@
 #include<bits/stdc++.h>
 using namespace std;
 typedef  long long ll;
+using vll=vector<ll>;
+using vi=vector<int>;
+
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
-//自作関数
-template<class T> ll llpow(T x,T n){ll ans=1;while(n--){ans*=x;}return ans;}
+
+//pow(llpow,modpow)
+template<class T> ll llpow(T x,T n){ll ans=1;if(x==0)ans=0;while(n){if(n&1)ans*=x;x*=x;n>>=1;}return ans;}
+long long modpow(long long a, long long n, long long mod) {long long res = 1;while (n > 0) {if (n & 1) res = res * a % mod;a = a * a % mod;n >>= 1;}return res;}
+//最大公約数
+template<class T> inline T gcd(T x,T y){if(y==0)return x; else {return gcd(y,x%y);}}
+//最小公倍数
+template<class T> inline T lcm(T x,T y){return x/gcd(x,y)*y;}
+//逆元
+long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while (b) {long long t = a / b;a -= t * b; swap(a, b);u -= t * v; swap(u, v);}u %= m;if (u < 0) u += m;return u;}
 
 #define rep(i,n) for(ll i=0;i<(ll)n;i++)
 #define rep2(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
 
-long long INF = 1LL<<60;
+long long INF = 1LL<<60;;
 int n,m;
-int main(){
+vi a;
+ll ans=0;
+int mod=1e9+7;
+int main( ){
     cin>>n>>m;
-    ll div=1e9+7;
-    vector<bool> skip(n+10,false);
-    vector<ll> way(n+10);
-    rep(i,m){
-        int temp;
-        cin>>temp;
-        skip.at(temp)=true;
+    a.resize(m);
+    rep(i,m)cin>>a[i];
+    vi dp(n+1,0);
+    rep(i,m)dp[a[i]]=-1;
+    dp[0]=1;
+    for(int i=0;i<n;i++){
+        if(dp[i]==-1)continue;
+        for(int j=1;j<=2;j++){
+            if(i+j<=n&&dp[i+j]!=-1){
+                dp[i+j]+=dp[i];
+                dp[i+j]%=mod;
+                if(dp[i+j]<0)dp[i+j]+=mod;
+            }
+        }
     }
-    way.at(0)=1;
-    for(int i=1;i<=n;i++){
-        if(skip.at(i))continue;
-        if(!(skip.at(i-1)))way.at(i)+=way.at(i-1);
-        if(((i-2)>=0)&&(!(skip.at(i-2))))way.at(i)+=way.at(i-2);
-        way.at(i)%=div;
-    }
-    cout<<way.at(n)<<endl;
+    cout<<dp[n]<<endl;
     return 0;
 }
 
