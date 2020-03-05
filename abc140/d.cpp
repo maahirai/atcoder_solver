@@ -26,25 +26,10 @@ int main(){
     cin>>n>>k;
     string s;
     cin>>s;
-    int p=0;
-    char watch=s[0];
-    rep(i,k){
-    while(p<n&&s[p]==watch)p++;
-    while(p<n&&s[p]!=watch){
-        s[p]=watch;
-        p++;
-    }
-    }
-    int res=0;
-    rep(i,n){
-        if(s[i]=='R'&&i<n-1){
-           if(s[i]==s[i+1])res++;
-        }
-        else if(s[i]=='L'&&i>0){
-            if(s[i]==s[i-1])res++;
-        }
-    }
-    cout<<res<<endl;
+    int score=0;
+    rep(i,n-1)if(s[i]==s[i+1])score++;
+    int ans=min(n-1,score+2*k);
+    cout<<ans<<endl;
     return 0;
 }
 
