@@ -24,42 +24,17 @@ long long INF = 1LL<<60;
 int main( ){
     vi v(3);
     rep(i,3)cin>>v[i];
-    int eo[2]={0,0};
-    rep(i,3)eo[v[i]%2]++;
-    if(!eo[0]||!eo[1]){
-        sort(v.begin(),v.end(),greater<int>());
-        int cnt=0;
-        rep2(i,1,3){
-            while(v[0]>v[i]){
-                cnt++;
-                v[i]+=2;
-            }
-        }
-        cout<<cnt<<endl;
+    sort(v.begin(),v.end(),greater<int>());
+    int tsum=0;
+    rep(i,3){
+        tsum+=v[i];
+    }
+    if(tsum%2==(3*v[0])%2){
+        cout<<(3*v[0]-tsum)/2<<endl;
     }
     else{
-        int cnt=0;
-        if(!(eo[0]%2)){
-            rep(i,3)if(v[i]%2==0){
-                v[i]++;
-            }
-        }
-        else{
-            rep(i,3)if(v[i]%2==1){
-                v[i]++;
-            }
-        }
-            cnt++;
-            sort(v.begin(),v.end(),greater<int>());
-            rep2(i,1,3){
-                while(v[0]>v[i]){
-                    cnt++;
-                    v[i]+=2;
-                }
-            }
-        cout<<cnt<<endl;
+        cout<<(3*(v[0]+1)-tsum)/2<<endl;
     }
-    return 0;
 }
 
 
