@@ -34,6 +34,7 @@ int main( ){
             if(tmp==hi)continue;
             else{
                 w=false;
+                break;
             }
         }
         else {
