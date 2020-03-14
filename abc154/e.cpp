@@ -21,35 +21,46 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 #define rep2(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
 
 long long INF = 1LL<<60;
-int main( ){
-    string num;
-    cin>>num;
-    int K;
-    cin>>K;
-    //same(true 0,false 1),num_of_digit(100),num_of_notzero(3)
-    int dp[101][4][2]={0};
-    //何も決めてない状態
-    dp[0][0][0]=1;
-    rep(i,num.size()){
-            rep(j,4){
-                rep(k,2){
-                    rep(d,10){
-                    int nd=num[i]-'0';
-                    int ni=i+1,nj=j,nk=k;
-                    if(d!=0)nj++;
-                    if(nj>K)continue;
-                    //ここnkじゃなくてkなことに注意．．．
-                    if(k==0){
-                        if(nd>d)nk=1;
-                        if(d>nd)continue;
-                    }
-                    dp[ni][nj][nk]+=dp[i][j][k];
-                    }
-                }
-            }
+
+string s;int K;
+int comb(int n,int k){
+    if(k<0||n<k)return 0;
+
+    if(k==1)return n;
+    else if(k==2)return n*(n-1)/2;
+    else return n*(n-1)*(n-2)/6;
+}
+
+int solve(bool smaller,int i,int k){
+    int n=s.size();
+    if(i==n){
+        if(k==0)return 1;
+        else return 0;
     }
-    int n=num.size();
-    cout<<dp[n][K][0]+dp[n][K][1]<<endl;
+    if(k==0)return 1;
+
+    if(smaller){
+        return comb((n-i),k)*pow(9,k);
+    }
+    else{
+        int v=s.at(i)-'0';
+        if(v==0){
+            return solve(false,i+1,k);
+        }
+        else {
+        int aida,zero,pitta;
+        aida=solve(true,i+1,k-1)*(v-1);
+        zero=solve(true,i+1,k);
+        pitta=solve(false,i+1,k-1);
+        return aida+zero+pitta;
+        }
+    }
+}
+int main( ){
+    cin>>s>>K;
+    ll ans=0;
+    ans=solve(false,0,K);
+    cout<<ans<<endl;
     return 0;
 }
 
