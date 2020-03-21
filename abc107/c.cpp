@@ -1,45 +1,35 @@
 #include<bits/stdc++.h>
 using namespace std;
 typedef  long long ll;
+using vll=vector<ll>;
+using vi=vector<int>;
+
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
-//自作関数
-template<class T> ll llpow(T x,T n){ll ans=1;while(n--){ans*=x;}return ans;}
+
+//pow(llpow,modpow)
+template<class T> ll llpow(ll x,T n){ll ans=1;if(x==0)ans=0;while(n){if(n&1)ans*=x;x*=x;n>>=1;}return ans;}
+long long modpow(long long a, long long n, long long mod) {long long res = 1;while (n > 0) {if (n & 1) res = res * a % mod;a = a * a % mod;n >>= 1;}return res;}
+//最大公約数
+template<class T> inline T gcd(T x,T y){if(y==0)return x; else {return gcd(y,x%y);}}
+//最小公倍数
+template<class T> inline T lcm(T x,T y){return x/gcd(x,y)*y;}
+//逆元
+long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while (b) {long long t = a / b;a -= t * b; swap(a, b);u -= t * v; swap(u, v);}u %= m;if (u < 0) u += m;return u;}
 
 #define rep(i,n) for(ll i=0;i<(ll)n;i++)
 #define rep2(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
 
 long long INF = 1LL<<60;
-int n;
-int main(){
-    ll h,w;
-    cin>>h>>w;
-    char a[h][w];
-    rep(i,h){
-        rep(j,w){
-            cin>>a[i][j];
-        }
-    }
-
-    bool column[w];
-    bool row[h];
-    rep(i,w)column[i]=true;
-    rep(i,h)row[i]=true;
-    rep(i,h)rep(j,w)if(a[i][j]=='#')row[i]=false;
-
-    rep(i,w)rep(j,h)if(a[j][i]=='#')column[i]=false;
-
-    rep(i,h){
-        rep(j,w){
-            if((!row[i])&&(!column[j])){
-                cout<<a[i][j];
-            }
-            if((!row[i])&&(j==w-1)){
-                cout<<endl;
-            }
-        }
-    }
-    return 0;
+int main( ){
+    int n,k;
+    cin>>n>>k;
+    int x[n];
+    rep(i,n)cin>>x[i];
+    ll res=INF;
+    rep(i,n-k+1)chmin(res,(ll)abs(x[i])+abs(x[i+k-1]-x[i]));
+    for(int i=n-1;i-k+1>=0;i--)chmin(res,(ll)abs(x[i])+abs(x[i]-x[i-k+1]));
+    cout<<res<<endl;
 }
 
 
