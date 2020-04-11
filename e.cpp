@@ -21,6 +21,8 @@ template<class T> inline T lcm(T x,T y){return x/gcd(x,y)*y;}
 long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while (b) {long long t = a / b;a -= t * b; swap(a, b);u -= t * v; swap(u, v);}u %= m;if (u < 0) u += m;return u;}
 
 #define rep(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
+//試験導入
+#define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i++)
 
 long long INF = 1LL<<60;
 int main( ){
