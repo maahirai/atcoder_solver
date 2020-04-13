@@ -6,6 +6,7 @@ using vi=vector<int>;
 using vvi=vector<vector<int>>;
 using vb=vector<bool>;
 using pii=pair<int,int>;
+using vpii=vector<pair<int,int>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
@@ -23,6 +24,8 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 #define rep(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
 //試験導入
 #define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
+//配列名,< or >
+#define SORT(a,r) std::sort((a).begin(),(a).end(),[](auto const& x,auto const& y){return x r y})
 
 long long INF = 1LL<<60;
 int main( ){
