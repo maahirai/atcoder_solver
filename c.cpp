@@ -2,6 +2,7 @@
 using namespace std;
 typedef  long long ll;
 using vll=vector<ll>;
+using vvll=vector<vll>;
 using vi=vector<int>;
 using vvi=vector<vector<int>>;
 using vb=vector<bool>;
