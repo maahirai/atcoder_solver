@@ -1,39 +1,51 @@
 #include<bits/stdc++.h>
 using namespace std;
 typedef  long long ll;
+using vll=vector<ll>;
+using vvll=vector<vll>;
+using vi=vector<int>;
+using vvi=vector<vector<int>>;
+using vb=vector<bool>;
+using pii=pair<int,int>;
+using vpii=vector<pair<int,int>>;
+
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
 
-template<class T> ll llpow(T x,T n){ll ans=1;if(x==0)ans=0;while(n){if(n&1)ans*=x;x*=x;n>>=1;}return ans;}
+//pow(llpow,modpow)
+template<class T> ll llpow(ll x,T n){ll ans=1;if(x==0)ans=0;while(n){if(n&1)ans*=x;x*=x;n>>=1;}return ans;}
+long long modpow(long long a, long long n, long long mod) {long long res = 1;while (n > 0) {if (n & 1) res = res * a % mod;a = a * a % mod;n >>= 1;}return res;}
+//最大公約数
 template<class T> inline T gcd(T x,T y){if(y==0)return x; else {return gcd(y,x%y);}}
+//最小公倍数
 template<class T> inline T lcm(T x,T y){return x/gcd(x,y)*y;}
+//逆元
+long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while (b) {long long t = a / b;a -= t * b; swap(a, b);u -= t * v; swap(u, v);}u %= m;if (u < 0) u += m;return u;}
 
-#define rep(i,n) for(ll i=0;i<(ll)n;i++)
-#define rep2(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
-//yes(0:Yes or 1:YES)  no(0:No or 1:NO)
-void yes(int which_yes){if(which_yes==0)cout<<"Yes"<<endl;else if(which_yes==1)cout<<"YES"<<endl;}
-void no(int which_no){if(which_no==0)cout<<"No"<<endl;else if(which_no==1)cout<<"NO"<<endl;}
+#define rep(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
+//試験導入
+#define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
+
 long long INF = 1LL<<60;
-int main(){
+int main( ){
     int n;
     cin>>n;
-    int a[n];
-    rep(i,n)cin>>a[i];
-    int odd=0;
-    int fdivable=0;
-    rep(i,n){
-        if(a[i]%2)odd++;
-        else {
-            if(!(a[i]%4))fdivable++;
+    vi a(n);
+    rep(i,0,n)cin>>a[i];
+    int cntf=0,cntt=0;
+    rep(i,0,n){
+        if(a[i]%4==0)cntf++;
+        else if(a[i]%2==0)cntt++;
+    }
+    int rest=n-(cntt+cntf);
+    if(rest>cntf){
+        if(cntt!=0||rest-cntf>1){
+        cout<<"No"<<endl;
+        return 0;
         }
+
     }
-    if(odd>fdivable){
-        if((odd-fdivable<=1&&odd+fdivable==n)&&fdivable!=0)yes(0);
-        else no(0);
-    }
-    else{
-        yes(0);
-    }
+    cout<<"Yes"<<endl;
     return 0;
 }
 
