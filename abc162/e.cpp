@@ -2,10 +2,12 @@
 using namespace std;
 typedef  long long ll;
 using vll=vector<ll>;
+using vvll=vector<vll>;
 using vi=vector<int>;
 using vvi=vector<vector<int>>;
 using vb=vector<bool>;
 using pii=pair<int,int>;
+using vpii=vector<pair<int,int>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
@@ -24,37 +26,60 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 //試験導入
 #define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
 
-long long INF = 1LL<<60;
-ll fact[100010];
-ll mod=1e9+7;
-#define MAX 100010
-ll Sorce[MAX];
-void modcInit(ll i){
-    fact[0]=1;
-    rep(j,1,i+1){
-        fact[j]=fact[j-1]*j;
-        fact[j]%=mod;
+template<class T> inline T C(T x,T y){
+    if(x<y)return 0;
+    T div=min(x-y,y);
+    T v=max(x-y,y);
+    ll bunbo=1,bunshi=1;
+    irep(i,x-div+1,x+1){
+        bunshi*=i;
     }
+    rep(j,1,div+1){
+        bunbo*=j;
+    }
+    return bunshi/bunbo;
 }
-ll modc(ll n,ll x){
-    return fact[n]*modinv(fact[n-x]*fact[x]%mod,mod)%mod;
+template<class T> inline T modC(T x,T y,ll mod){
+    if(x<y)return 0;
+    T div=min(x-y,y);
+    ll bunbo=1,bunshi=1;
+    irep(i,x-div+1,x+1){
+        bunshi*=i;
+        bunshi%=mod;
+        if(bunshi<0)bunshi+=mod;
+    }
+    rep(j,1,div+1){
+        bunbo*=j;
+        bunbo%=mod;
+        if(bunbo<0)bunbo+=mod;
+    }
+    T ans=bunshi*modinv(bunbo,mod)%mod;
+    if(ans<0)ans+=mod;
+    return ans;
 }
-
+long long INF = 1LL<<60;
 int main( ){
-    ll n,k;cin>>n>>k;
-    vll res(k+1,0);
-    irep(i,1,k+1){
-        ll quem=k/i;
-        res[i]=modpow(quem,n,mod)%mod;
-        rep(p,2,quem+1){
-            res[i]-=res[p*i];
-            res[i]%=mod;
+    ll N,K;
+    cin>>N>>K;
+    ll mod=1e9+7;
+    vll gcdres(K+1,0);
+    irep(i,1,K+1){
+        ll quem=K/i;
+        gcdres[i]=modpow(quem,N,mod)%mod;
+        if(gcdres[i]<0)gcdres[i]+=mod;
+        if(quem>=2){
+            rep(j,2,quem+1){
+                gcdres[i]-=gcdres[i*j];
+                gcdres[i]%=mod;
+                if(gcdres[i]<0)gcdres[i]+=mod;
+            }
         }
     }
     ll ans=0;
-    rep(i,1,k+1){
-        ans+=res[i]*i%mod;
+    rep(i,1,K+1){
+        ans+=gcdres[i]*i%mod;
         ans%=mod;
+        if(ans<0)ans+=mod;
     }
     cout<<ans<<endl;
     return 0;
