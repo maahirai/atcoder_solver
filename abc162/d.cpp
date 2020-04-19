@@ -1,145 +1,58 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-using vll = vector<ll>;
-using vi = vector<int>;
-using vvi = vector<vector<int>>;
-using vb = vector<bool>;
-using pii = pair<int, int>;
+typedef  long long ll;
+using vll=vector<ll>;
+using vvll=vector<vll>;
+using vi=vector<int>;
+using vvi=vector<vector<int>>;
+using vb=vector<bool>;
+using pii=pair<int,int>;
+using vpii=vector<pair<int,int>>;
 
-template <class T>
-inline bool chmin(T &a, T b)
-{
-    if (a > b)
-    {
-        a = b;
-        return true;
-    }
-    return false;
-}
-template <class T>
-inline bool chmax(T &a, T b)
-{
-    if (a < b)
-    {
-        a = b;
-        return true;
-    }
-    return false;
-}
+template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
+template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
 
 //pow(llpow,modpow)
-template <class T>
-ll llpow(ll x, T n)
-{
-    ll ans = 1;
-    if (x == 0)
-        ans = 0;
-    while (n)
-    {
-        if (n & 1)
-            ans *= x;
-        x *= x;
-        n >>= 1;
-    }
-    return ans;
-}
-long long modpow(long long a, long long n, long long mod)
-{
-    long long res = 1;
-    while (n > 0)
-    {
-        if (n & 1)
-            res = res * a % mod;
-        a = a * a % mod;
-        n >>= 1;
-    }
-    return res;
-}
+template<class T> ll llpow(ll x,T n){ll ans=1;if(x==0)ans=0;while(n){if(n&1)ans*=x;x*=x;n>>=1;}return ans;}
+long long modpow(long long a, long long n, long long mod) {long long res = 1;while (n > 0) {if (n & 1) res = res * a % mod;a = a * a % mod;n >>= 1;}return res;}
 //最大公約数
-template <class T>
-inline T gcd(T x, T y)
-{
-    if (y == 0)
-        return x;
-    else
-    {
-        return gcd(y, x % y);
-    }
-}
+template<class T> inline T gcd(T x,T y){if(y==0)return x; else {return gcd(y,x%y);}}
 //最小公倍数
-template <class T>
-inline T lcm(T x, T y) { return x / gcd(x, y) * y; }
+template<class T> inline T lcm(T x,T y){return x/gcd(x,y)*y;}
 //逆元
-long long modinv(long long a, long long m)
-{
-    long long b = m, u = 1, v = 0;
-    while (b)
-    {
-        long long t = a / b;
-        a -= t * b;
-        swap(a, b);
-        u -= t * v;
-        swap(u, v);
-    }
-    u %= m;
-    if (u < 0)
-        u += m;
-    return u;
-}
+long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while (b) {long long t = a / b;a -= t * b; swap(a, b);u -= t * v; swap(u, v);}u %= m;if (u < 0) u += m;return u;}
 
 #define rep(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
 //試験導入
-#define irep(i, end_i, begin_i) for (ll i = (ll)begin_i - 1; i >= (ll)end_i; i--)
+#define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
 
-long long INF = 1LL << 60;
-int main()
-{
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    vi kind[3];
-    rep(i, 0, n)
-    {
-        if (s[i] == 'R')
-            kind[0].push_back(i);
-        else if (s[i] == 'G')
-            kind[1].push_back(i);
-        else if(s[i]=='B')
-            kind[2].push_back(i);
+long long INF = 1LL<<60;
+int main( ){
+    int N;
+    cin>>N;
+    string S;
+    cin>>S;
+    vi cnt(3,0);
+    rep(i,0,S.size()){
+        if(S[i]=='R')cnt[0]++;
+        else if(S[i]=='G')cnt[1]++;
+        else cnt[2]++;
     }
-    ll cnt = 0;
-    rep(i, 0, 3)
-    {
-        for (int ii : kind[i])
-        {
-            rep(j, 0, 3)
-            {
-                if (i == j)
-                    continue;
-                auto p = upper_bound(kind[j].begin(), kind[j].end(), ii);
-                if (p == kind[j].end())
-                    continue;
-                else
-                {
-                    for (auto ji = p; ji != kind[j].end(); ji++)
-                    {
-                        ll k = (3 - i - j);
-                        auto pk = upper_bound(kind[k].begin(), kind[k].end(), *ji);
-                        if (pk == kind[k].end())
-                            break;
-                        else
-                        {
-                            auto ki = pk;
-                            cnt += distance(ki, kind[k].end());
-                            if(*lower_bound(kind[k].begin(), kind[k].end(), *(ji)+(*ji-ii))==*(ji)+(*ji-ii))cnt--;
-                        }
-                    }
-                }
-            }
+    ll res=1;
+    rep(i,0,3)res*=cnt[i];
+    rep(j,0,N){
+        rep(i,0,j){
+           ll k=2*j-i;
+           if(k<N){
+               if(S[i]==S[j])continue;
+               if(S[j]==S[k])continue;
+               if(S[k]==S[i])continue;
+               res--;
+           }
         }
     }
-    cout << cnt << endl;
+    cout<<res<<endl;
     return 0;
 }
+
+
