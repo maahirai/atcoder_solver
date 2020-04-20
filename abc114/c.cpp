@@ -1,50 +1,61 @@
 #include<bits/stdc++.h>
 using namespace std;
 typedef  long long ll;
+using vll=vector<ll>;
+using vi=vector<int>;
+using vvi=vector<vector<int>>;
+using vb=vector<bool>;
+using pii=pair<int,int>;
+
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
 
-template<class T> ll llpow(T x,T n){ll ans=1;if(x==0)ans=0;while(n){if(n&1)ans*=x;x*=x;n>>=1;}return ans;}
+//pow(llpow,modpow)
+template<class T> ll llpow(ll x,T n){ll ans=1;if(x==0)ans=0;while(n){if(n&1)ans*=x;x*=x;n>>=1;}return ans;}
+long long modpow(long long a, long long n, long long mod) {long long res = 1;while (n > 0) {if (n & 1) res = res * a % mod;a = a * a % mod;n >>= 1;}return res;}
+//最大公約数
 template<class T> inline T gcd(T x,T y){if(y==0)return x; else {return gcd(y,x%y);}}
+//最小公倍数
 template<class T> inline T lcm(T x,T y){return x/gcd(x,y)*y;}
+//逆元
+long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while (b) {long long t = a / b;a -= t * b; swap(a, b);u -= t * v; swap(u, v);}u %= m;if (u < 0) u += m;return u;}
 
-#define rep(i,n) for(ll i=0;i<(ll)n;i++)
-#define rep2(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
+#define rep(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
 
 long long INF = 1LL<<60;
-
-
-int alt[3]={3,5,7};
-int ans=0;
-//dd:決まった桁
-void solve(ll dd,bool t,bool f,bool s,int to){
-    if(t&&f&&s){
-        ans++;
-        rep(i,3){
-        ll tmp=dd*10+alt[i];
-        if(tmp<=to){
-            solve(dd*10+alt[i],t,f,s,to);
-        }
-        }
+bool check(ll s){
+    bool sev=false,five,three;
+    five=sev;three=sev;
+    while(s){
+        if(s%10==3)three=true;
+        else if(s%10==5)five=true;
+        else if(s%10==7)sev=true;
+        s/=10;
     }
-   else{
-        rep(i,3){
-        ll tmp=dd*10+alt[i];
-        if(tmp<=to){
-            if(i==0)solve(tmp,true,f,s,to);
-            else if(i==1)solve(tmp,t,true,s,to);
-            else { solve(tmp,t,f,true,to);}
-        }
-        }
-    }
+    return (three&&five&&sev);
 }
-int main(){
+int main( ){
     int n;
     cin>>n;
-    bool t,f,s;
-    t=f=s=false;
-    solve(0LL,t,f,s,n);
-    cout<<ans<<endl;
+    ll cnt=0;
+    queue<pair<ll,bool>> q;
+    int res[]={3,5,7};
+    q.emplace(0,false);
+    while(!q.empty()){
+        pair<ll,bool>t=q.front();
+        bool b=t.second;
+        ll s=t.first;
+        q.pop();
+        if(s>n)break;
+        if(b)cnt++;
+        rep(i,0,3){
+            ll alt=s*10+res[i];
+            bool c=b;
+            if(b==false)c=check(alt);
+            q.emplace(alt,c);
+        }
+    }
+    cout<<cnt<<endl;
     return 0;
 }
 
