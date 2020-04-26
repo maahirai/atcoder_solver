@@ -28,27 +28,25 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    int N;
-    cin>>N;
-    string S;
-    cin>>S;
-    vi cnt(3,0);
-    rep(i,0,S.size()){
-        if(S[i]=='R')cnt[0]++;
-        else if(S[i]=='G')cnt[1]++;
+    ll n;
+    cin>>n;
+    string s;
+    cin>>s;
+    vll cnt(3,0);
+    rep(i,0,s.size()){
+        if(s[i]=='R')cnt[0]++;
+        else if(s[i]=='G')cnt[1]++;
         else cnt[2]++;
     }
-    ll res=1;
-    rep(i,0,3)res*=cnt[i];
-    rep(j,0,N){
-        rep(i,0,j){
-           ll k=2*j-i;
-           if(k<N){
-               if(S[i]==S[j])continue;
-               if(S[j]==S[k])continue;
-               if(S[k]==S[i])continue;
-               res--;
-           }
+    ll res=cnt[0]*cnt[1]*cnt[2];
+    rep(i,0,n){
+        rep(j,i+1,n){
+            ll k=2*j-i;
+            if(k>=n||k<0||k<=j)continue;
+            if(s[i]==s[j])continue;
+            if(s[j]==s[k])continue;
+            if(s[i]==s[k])continue;
+            res--;
         }
     }
     cout<<res<<endl;
