@@ -26,58 +26,25 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 //試験導入
 #define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
 
-template<class T> inline T C(T x,T y){
-    if(x<y)return 0;
-    T div=min(x-y,y);
-    T v=max(x-y,y);
-    ll bunbo=1,bunshi=1;
-    irep(i,x-div+1,x+1){
-        bunshi*=i;
-    }
-    rep(j,1,div+1){
-        bunbo*=j;
-    }
-    return bunshi/bunbo;
-}
-template<class T> inline T modC(T x,T y,ll mod){
-    if(x<y)return 0;
-    T div=min(x-y,y);
-    ll bunbo=1,bunshi=1;
-    irep(i,x-div+1,x+1){
-        bunshi*=i;
-        bunshi%=mod;
-        if(bunshi<0)bunshi+=mod;
-    }
-    rep(j,1,div+1){
-        bunbo*=j;
-        bunbo%=mod;
-        if(bunbo<0)bunbo+=mod;
-    }
-    T ans=bunshi*modinv(bunbo,mod)%mod;
-    if(ans<0)ans+=mod;
-    return ans;
-}
 long long INF = 1LL<<60;
 int main( ){
-    ll N,K;
-    cin>>N>>K;
+    ll n,k;
+    cin>>n>>k;
     ll mod=1e9+7;
-    vll gcdres(K+1,0);
-    irep(i,1,K+1){
-        ll quem=K/i;
-        gcdres[i]=modpow(quem,N,mod)%mod;
-        if(gcdres[i]<0)gcdres[i]+=mod;
-        if(quem>=2){
-            rep(j,2,quem+1){
-                gcdres[i]-=gcdres[i*j];
-                gcdres[i]%=mod;
-                if(gcdres[i]<0)gcdres[i]+=mod;
-            }
-        }
-    }
+    vll cnt(k+1,0);
     ll ans=0;
-    rep(i,1,K+1){
-        ans+=gcdres[i]*i%mod;
+    irep(i,1,k+1){
+        ll cpy=k;
+        cnt[i]=modpow(k/i,n,mod);
+        cpy/=i;
+        rep(minus,2,cpy+1){
+            cnt[i]-=cnt[minus*i];
+            cnt[i]%=mod;
+            if(cnt[i]<0)cnt[i]+=mod;
+        }
+        ll add=cnt[i]*i%mod;
+        if(add<0)add+=mod;
+        ans+=add;
         ans%=mod;
         if(ans<0)ans+=mod;
     }
