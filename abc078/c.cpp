@@ -28,10 +28,10 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    int n,m;
+    ll n,m;
     cin>>n>>m;
-    ll res=100*(n-m)+1900*(m);
-    cout<<llpow(2LL,m)*res<<endl;
+    ll p=1900*m+100*(n-m);
+    cout<<llpow(2,m)*p<<endl;
     return 0;
 }
 
