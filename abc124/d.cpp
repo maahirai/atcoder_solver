@@ -2,10 +2,12 @@
 using namespace std;
 typedef  long long ll;
 using vll=vector<ll>;
+using vvll=vector<vll>;
 using vi=vector<int>;
 using vvi=vector<vector<int>>;
 using vb=vector<bool>;
 using pii=pair<int,int>;
+using vpii=vector<pair<int,int>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
@@ -26,12 +28,56 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    int n,k;
-    cin>>n>>k;
+    vpii info;
     string s;
+    int k;
+    int n;
+    cin>>n;
+    cin>>k;
     cin>>s;
-    list<pii> ls;
+    int p=0;
+    while(p<n){
+        char kind=s[p];
+        int cnt=0;
+        while(p<n&&s[p]==kind){
+            cnt++;
+            p++;
+        }
+        pii e=make_pair(kind-'0',cnt);
+        info.push_back(e);
+    }
+    if((info.size()+1)/2<=k){
+        cout<<n<<endl;
+        return 0;
+    }
+    int r=0;
+    int cnt=0;
+    int ans=0;
+    int res=0;
+    for(int l=0;l<info.size();l++){
+        while(true){
+            if(cnt<k&&r<info.size()&&info[r].first==0){
+                cnt++;
+                res+=info[r++].second;
+            }
+            else if(r<info.size()&&info[r].first==1){
+                res+=info[r++].second;
+            }
+            else{
+                break;
+            }
+        }
+        chmax(ans,res);
 
+        if(r==l){
+            r++;
+        }
+        else{
+            res-=info[l].second;
+            if(info[l].first==0)cnt--;
+        }
+   }
+   cout<<ans<<endl;
     return 0;
 }
 
