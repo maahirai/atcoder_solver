@@ -28,32 +28,34 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    int n,m,q;
-    cin>>n>>m>>q;
-    vi a(q),b(q),c(q),d(q);
-    vpii cmp;
-    rep(i,0,q){
-        cin>>a[i]>>b[i]>>c[i]>>d[i];
-        a[i]--;b[i]--;
-    }
-    vi res(n+m-1,1);
-    rep(i,0,n)res[i]=0;
-    ll max=0;
+    ll N,M;
+    cin>>N>>M;
+    ll Q;
+    cin>>Q;
+    vi a(Q),b(Q),c(Q),d(Q);
+    rep(i,0,Q)cin>>a[i]>>b[i]>>c[i]>>d[i],a[i]--,b[i]--;
+    vi res(N+M-1,1);
+    rep(i,0,M-1)res[i]=0;
+    ll ans=0;
+    //注意：next_permutationは辞書順最小から最大までの列挙.
     do{
-        vi A(n);
-        int cntone=1;
-        int id=0;
-        rep(i,0,n+m-1){
-            if(res[i])cntone++;
-            else A[id++]=cntone;
+        vi A(N,1);
+        int cnt=0;
+        int p=0;
+        rep(i,0,N+M-1){
+            if(res[i])
+                A[p++]+=cnt;
+            else{
+                cnt++;
+            }
         }
-        ll v=0;
-        rep(i,0,q){
-            if(A[b[i]]-A[a[i]]==c[i])v+=d[i];
+        ll sum=0;
+        rep(i,0,Q){
+            if(A[b[i]]-A[a[i]]==c[i])sum+=d[i];
         }
-        chmax(max,v);
+        chmax(ans,sum);
     }while(next_permutation(res.begin(),res.end()));
-    cout<<max<<endl;
+    cout<<ans<<endl;
     return 0;
 }
 
