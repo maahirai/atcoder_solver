@@ -10,9 +10,16 @@ using pii=pair<int,int>;
 using vpii=vector<pair<int,int>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
-template<class T> inline bool chmay(T& a, T b) {if (a < b) {a = b;return true;}return false;}
+template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
 
 //pow(llpow,modpow)
+template<class T> ll llpow(ll x,T n){ll ans=1;if(x==0)ans=0;while(n){if(n&1)ans*=x;x*=x;n>>=1;}return ans;}
+long long modpow(long long a, long long n, long long mod) {long long res = 1;while (n > 0) {if (n & 1) res = res * a % mod;a = a * a % mod;n >>= 1;}return res;}
+//最大公約数
+template<class T> inline T gcd(T x,T y){if(y==0)return x; else {return gcd(y,x%y);}}
+//最小公倍数
+template<class T> inline T lcm(T x,T y){return x/gcd(x,y)*y;}
+//逆元
 long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while (b) {long long t = a / b;a -= t * b; swap(a, b);u -= t * v; swap(u, v);}u %= m;if (u < 0) u += m;return u;}
 
 #define rep(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
@@ -21,44 +28,27 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    int n;
-    cin>>n;
-    vpii rxy(n),byx(n);
-    rep(i,0,n){
-        int x,y;
-        cin>>x>>y;
-        pii p=make_pair(x,y);
-        rxy[i]=p;
-    }
-    rep(i,0,n){
-        int x,y;
-        cin>>x>>y;
-        pii p=make_pair(y,x);
-        byx[i]=p;
-    }
-    vb fixedr(n,false);
-    int cnt=0;
+    int N;
+    cin>>N;
+    vpii rxy(N);
+    vpii byx(N);
+    rep(i,0,N)cin>>rxy[i].first>>rxy[i].second;
+    rep(i,0,N)cin>>byx[i].second>>byx[i].first;
     sort(rxy.begin(),rxy.end());
     sort(byx.begin(),byx.end());
-    rep(bi,0,n){
-        int  bx=byx[bi].second;
-        int  by=byx[bi].first;
-        int rfi=-1,vrf=0;
-        rep(ri,0,n){
+    ll ans=0;
+    vb fixedr(N,false);
+    rep(bi,0,N){
+        int ci=-1;
+        rep(ri,0,N){
             if(fixedr[ri])continue;
-            int rx,ry;
-            rx=rxy[ri].first;
-            ry=rxy[ri].second;
-            if(rx<bx&&ry<by){
-                rfi=ri;
+            if(rxy[ri].first<byx[bi].second&&rxy[ri].second<byx[bi].first){
+                ci=ri;
             }
         }
-        if(rfi!=-1){
-            cnt++;
-            fixedr[rfi]=true;
-        }
+        if(ci!=-1)fixedr[ci]=true,ans++;
     }
-    cout<<cnt<<endl;
+    cout<<ans<<endl;
     return 0;
 }
 

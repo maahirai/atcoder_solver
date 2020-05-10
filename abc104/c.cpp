@@ -28,40 +28,41 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    int D,G;
+    ll D;ll G;
     cin>>D>>G;
-    vll p(D),c(D);
-    rep(i,0,D)cin>>p[i]>>c[i];
-    ll res=INF;
-    for(ll ch=0;ch<1<<D;ch++){
-        ll cnt=0;
-        ll sum=0;
-        set<int> idx;
-        rep(i,0,D){
-            if((ch>>i)&1){
-                cnt+=p[i];
-                sum+=(i+1)*p[i]*100+c[i];
-                idx.insert(i);
+    vpii P(D);
+    rep(i,0,D)cin>>P[i].first>>P[i].second;
+    ll ans=INF;
+    rep(i,0,1<<D){
+        ll cnt=0,res=0;
+        rep(j,0,D){
+            if((i>>j)&1){
+                res+=P[j].first*(j+1)*100+P[j].second;
+                cnt+=P[j].first;
             }
         }
-        if(sum>=G)chmin(res,cnt);
-        else{
-            bool fin=false;
-            irep(i,0,D){
-                if(fin)break;
-                if(idx.find(i)==idx.end()){
-                    rep(j,0,p[i]){
-                        if((j+1)*(i+1)*100+sum>=G){
-                            chmin(res,j+1+cnt);
-                            fin=true;
-                            break;
+        if(res<G){
+            irep(j,0,D){
+                if(((i>>j)&1)==0){
+                    if((res+(P[j].first-1)*(j+1)*100)<G)
+                        break;
+                    else{
+                        rep(num,1,P[j].first){
+                            res+=(j+1)*100,cnt++;
+                            if(res>=G){
+                                chmin(ans,cnt);
+                                break;
+                            }
                         }
+                        break;
                     }
                 }
             }
         }
+        else
+            chmin(ans,cnt);
     }
-    cout<<res<<endl;
+    cout<<ans<<endl;
     return 0;
 }
 

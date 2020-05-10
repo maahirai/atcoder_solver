@@ -30,33 +30,21 @@ long long INF = 1LL<<60;
 int main( ){
     ll N,M;
     cin>>N>>M;
-    vll day(N),pay(N);
-    rep(i,0,N)cin>>day[i]>>pay[i];
-    using pll =pair<ll,ll>;
-    priority_queue<pll> q;
-    rep(i,0,N)q.emplace(pay[i],day[i]);
-
-    vb occpy(M+1,false);
-    set<ll> ok;
-    rep(i,0,M)ok.insert(i+1);
-    ll ans=0;
-
-    while(!q.empty()){
-        auto p=q.top(); q.pop();
-        if(ok.lower_bound(p.second)==ok.end())continue;
-
-        if(occpy[p.second]){
-            auto itr=ok.lower_bound(p.second);
-            ok.erase(*itr);
-            occpy[*itr]=true;
-        }
-        else{
-            occpy[p.second]=true;
-            ok.erase(p.second);
-        }
-        ans+=p.first;
-   }
-    cout<<ans<<endl;
+    vpii payday(N);
+    rep(i,0,N){
+        cin>>payday[i].second>>payday[i].first;
+    }
+    sort(payday.rbegin(),payday.rend());
+    set<int> canwork;
+    rep(i,1,M+1)canwork.insert(i);
+    ll res=0;
+    rep(i,0,N){
+        auto pos=canwork.lower_bound(payday[i].second);
+        if(pos==canwork.end())continue;
+        canwork.erase(*pos);
+        res+=payday[i].first;
+    }
+    cout<<res<<endl;
     return 0;
 }
 
