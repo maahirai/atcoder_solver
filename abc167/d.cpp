@@ -32,26 +32,27 @@ int main( ){
     cin>>N>>K;
     vi A(N);
     rep(i,0,N)cin>>A[i],A[i]--;
-    int nxt=0;
-    int a=0;
-    vi visit;
-    vi  cnt(N,-1);
-    while(cnt[nxt]==-1){
-        visit.push_back(nxt+1);
-        cnt[nxt]=a++;
-        nxt=A[nxt];
+    vb bit(64,false);
+    ll highestbit=-1;
+    rep(i,0,64){
+        if((K>>i)&1){
+            bit[i]=true;
+            chmax(highestbit,i);
+        }
     }
-    if(K<visit.size()){
-        cout<<visit[K]<<endl;
-        return 0;
+    vvll doubling(highestbit+1,vll(N,0));
+    rep(i,0,N){
+        doubling[0][i]=A[i];
     }
-    else{
-        int loopsize=visit.size()-cnt[nxt];
-        int l=visit.size()-loopsize;
-        K-=l;
-        K%=loopsize;
-        cout<<visit[K+l]<<endl;
+    rep(i,1,highestbit+1){
+        rep(j,0,N)
+            doubling[i][j]=doubling[i-1][doubling[i-1][j]];
     }
+    int now=0;
+    rep(i,0,highestbit+1){
+        if(bit[i])now=doubling[i][now];
+    }
+    cout<<now+1<<endl;
     return 0;
 }
 
