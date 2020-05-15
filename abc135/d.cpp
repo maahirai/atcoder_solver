@@ -27,27 +27,33 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 #define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
 
 long long INF = 1LL<<60;
-
 ll dp[100010][13];
 int main( ){
-    string S;
-    cin>>S;
-    const ll mod=1e9+7;
+    string s;
+    cin>>s;
+    ll mod=1e9+7;
     dp[0][0]=1;
-    rep(i,1,10)dp[0][i]=0;
-    int N=S.size();
-    rep(i,0,N){
-        if(S[i]=='?'){
-            rep(pr,0,13)
-                rep(d,0,10)
-                    dp[i+1][(pr*10+d)%13]+=dp[i][pr],dp[i+1][(pr*10+d)%13]%=mod;
+    int n=s.size();
+    rep(i,0,n){
+        if(s[i]=='?'){
+            rep(pd,0,13){
+                rep(now,0,10){
+                    dp[i+1][(pd*10+now)%13]+=dp[i][pd];
+                    dp[i+1][(now+pd*10)%13]%=mod;
+                    if(dp[i+1][(now+pd*10)%13]<0)dp[i+1][(now+pd*10)%13]+=mod;
+                }
+            }
         }
         else{
-            rep(j,0,13)
-                dp[i+1][(S[i]-'0'+j*10)%13]+=dp[i][j],dp[i+1][(S[i]-'0'+j*10)%13]%=mod;
+           int now=s[i]-'0';
+           rep(pd,0,13){
+                dp[i+1][(pd*10+now)%13]+=dp[i][pd];
+                dp[i+1][(now+pd*10)%13]%=mod;
+                if(dp[i+1][(now+pd*10)%13]<0)dp[i+1][(now+pd*10)%13]+=mod;
+           }
         }
     }
-    cout<<dp[N][5]<<endl;
+    cout<<dp[n][5]<<endl;
     return 0;
 }
 

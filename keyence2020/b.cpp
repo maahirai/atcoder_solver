@@ -28,31 +28,23 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    string s;
-    cin>>s;
-    string t;
-    cin>>t;
-    ll loop=0,pos=0;
-    set<int> eachpos[26];
-    int sn=s.size(),tn=t.size();
-    rep(i,0,s.size()){
-        eachpos[s[i]-'a'].insert(i);
+    int n;
+    cin>>n;
+    vpii res;
+    rep(i,0,n){
+        int x,l;
+        cin>>x>>l;
+        pii e=make_pair(x+l,x-l);
+        res.push_back(e);
     }
-    rep(i,0,t.size()){
-        if(eachpos[t[i]-'a'].empty()){
-            cout<<-1<<endl;
-            return 0;
-        }
-        auto itr=eachpos[t[i]-'a'].lower_bound(pos);
-        if(itr==eachpos[t[i]-'a'].end()){
-            loop++;
-            pos=0;
-            itr=eachpos[t[i]-'a'].lower_bound(pos);
-        }
-        pos=*itr;
-        pos++;
+    sort(res.begin(),res.end());
+    int l=-(1<<30);
+    ll ans=0;
+    rep(i,0,n){
+        pii e=res[i];
+        if(l<=e.second)ans++,l=e.first;
     }
-    cout<<loop*sn+pos<<endl;
+    cout<<ans<<endl;
     return 0;
 }
 

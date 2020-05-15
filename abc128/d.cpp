@@ -28,31 +28,23 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    int N,K;
+    ll N,K;
     cin>>N>>K;
-    ll sum=0;
-    int val;
-    vi v;
-    rep(i,0,N)cin>>val,v.push_back(val);
     ll ans=-INF;
-
+    vi v(N);
+    rep(i,0,N)cin>>v[i];
     rep(l,0,K+1){
-        rep(r,0,K-l+1){
-            ll rest=K-(l+r);
-            if(l+r>N||rest<0)break;
-            ll sum=0;
-            priority_queue<int,vi,greater<int>> q;
-            rep(i,0,r)q.push(v[i]),sum+=v[i];
-            rep(i,0,l)q.push(v[N-1-i]),sum+=v[N-1-i];
-            int cnt=0;
-            while(cnt<(r+l)&&cnt<rest){
-                int minus=q.top();
-                q.pop();
-                if(minus>=0)break;
-                cnt++;
-                sum-=minus;
+        rep(r,0,(K+1)-l){
+            ll res=0;
+            if(l+r>N)break;
+            priority_queue<int,vi,greater<int>>q;
+            rep(tl,0,l)res+=v[tl],q.push(v[tl]);
+            rep(tr,0,r)res+=v[N-1-tr],q.push(v[N-1-tr]);
+            rep(ta,0,K-(l+r)){
+                if(q.empty()==false&&q.top()<0)res-=q.top(),q.pop();
+                else break;
             }
-            chmax(ans,sum);
+            chmax(ans,res);
         }
     }
     cout<<ans<<endl;

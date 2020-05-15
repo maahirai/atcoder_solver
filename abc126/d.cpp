@@ -8,6 +8,8 @@ using vvi=vector<vector<int>>;
 using vb=vector<bool>;
 using pii=pair<int,int>;
 using vpii=vector<pair<int,int>>;
+using pllll=pair<ll,ll>;
+using vpllll=vector<pair<ll,ll>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
@@ -27,32 +29,36 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 #define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
 
 long long INF = 1LL<<60;
-
 int main( ){
     int N;
     cin>>N;
-    vpii conne[N];
+    vpii cone[N];
     rep(i,0,N-1){
         int u,v,w;
         cin>>u>>v>>w;
         u--,v--;
-        pii p=make_pair(v,w);
-        conne[u].push_back(p);
-        p.first=u;
-        conne[v].push_back(p);
+        pii ev=make_pair(u,w);
+        pii eu=make_pair(v,w);
+        cone[u].push_back(eu);
+        cone[v].push_back(ev);
     }
-    using pill =pair<int,ll>;
-    queue<pill> q;
-    vll dist(N,-1);
+    priority_queue<pllll,vector<pllll>,greater<pllll>> q;
     q.emplace(0,0);
+    vll dist(N,INF);
+    vb fixed(N,false);
     dist[0]=0;
     while(!q.empty()){
-        pill now=q.front();
-        q.pop();
-        for(pii next:conne[now.first]){
-            if(dist[next.first]!=-1)continue;
-            dist[next.first]=next.second+now.second;
-            q.emplace(next.first,next.second+now.second);
+        pllll e=q.top(); q.pop();
+        ll idx=e.second;
+        ll d=e.first;
+        fixed[idx]=true;
+        for(auto nxt:cone[e.second]){
+            ll nidx=nxt.first;
+            ll add=nxt.second;
+            if(fixed[nidx])continue;
+            ll nd=add+d;
+            chmin(dist[nidx],nd);
+            q.emplace(nd,nidx);
         }
     }
     rep(i,0,N)cout<<dist[i]%2<<endl;
