@@ -1,44 +1,42 @@
-#include<iostream>
-#include<iomanip>
-#include<vector>
-#include<map>
-#include<set>
-#include<algorithm>
-#include<numeric>
-#include<limits>
-#include<bitset>
-#include<functional>
-#include<type_traits>
-#include<queue>
-#include<stack>
-#include<array>
-#include<random>
-#include<utility>
-#include<cstdlib>
-#include<ctime>
-
+#include<bits/stdc++.h>
 using namespace std;
-
 typedef  long long ll;
+using vll=vector<ll>;
+using vvll=vector<vll>;
+using vi=vector<int>;
+using vvi=vector<vector<int>>;
+using vb=vector<bool>;
+using pii=pair<int,int>;
+using vpii=vector<pair<int,int>>;
+
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
 
-#define rep(i,n) for(int i=0;i<(int)n;i++)
-#define rep2(i, begin_i, end_i) for (int i = (int)begin_i; i < (int)end_i; i++)
+//pow(llpow,modpow)
+template<class T> ll llpow(ll x,T n){ll ans=1;if(x==0)ans=0;while(n){if(n&1)ans*=x;x*=x;n>>=1;}return ans;}
+long long modpow(long long a, long long n, long long mod) {long long res = 1;while (n > 0) {if (n & 1) res = res * a % mod;a = a * a % mod;n >>= 1;}return res;}
+//最大公約数
+template<class T> inline T gcd(T x,T y){if(y==0)return x; else {return gcd(y,x%y);}}
+//最小公倍数
+template<class T> inline T lcm(T x,T y){return x/gcd(x,y)*y;}
+//逆元
+long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while (b) {long long t = a / b;a -= t * b; swap(a, b);u -= t * v; swap(u, v);}u %= m;if (u < 0) u += m;return u;}
+
+#define rep(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
+//試験導入
+#define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
 
 long long INF = 1LL<<60;
-long long dp[100010];
-int h[100010];
-int64_t x,y;
-int main(){
+int main( ){
+    ll x,y;
     cin>>x>>y;
-    int64_t kouho=x;
-    int64_t count=1;
-    while(kouho<=y){
-       kouho*=2;
-       count++;
+    ll ans=0;
+    y/=x; ans++;
+    while(y>=2){
+        y/=2;
+        ans++;
     }
-    cout<<count-1<<endl;
+    cout<<ans<<endl;
     return 0;
 }
 

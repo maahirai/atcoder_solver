@@ -28,32 +28,30 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    string s,t;
-    cin>>s>>t;
-    int exist=-1;
-    rep(i,0,s.size()){
-        if(i+t.size()>s.size())break;
-        bool check=true;
-        rep(j,0,t.size()){
-            if(s[i+j]==t[j]||s[i+j]=='?')continue;
-            else check=false;
+    int n;
+    cin>>n;
+    vi res;
+    rep(i,0,n){
+        int w;
+        cin>>w;
+        if(res.size()==0){
+            res.push_back(w);
         }
-        if(check)chmax(exist,(int)i);
+        else{
+            bool noroom=true;
+            rep(j,0,res.size()){
+                if(res[j]>=w){
+                    res[j]=w;
+                    noroom=false;
+                    sort(res.begin(),res.end());
+                    break;
+                }
+            }
+            if(noroom)
+                res.push_back(w);
+        }
     }
-        if(exist!=-1){
-            rep(f,0,exist){
-                if(s[f]=='?')cout<<'a';
-                else cout<<s[f];
-            }
-            cout<<t;
-            rep(f,exist+t.size(),s.size()){
-                if(s[f]=='?')cout<<'a';
-                else cout<<s[f];
-            }
-            cout<<endl;
-            return 0;
-        }
-    cout<<"UNRESTORABLE"<<endl;
+    cout<<res.size()<<endl;
     return 0;
 }
 
