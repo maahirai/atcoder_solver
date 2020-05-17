@@ -8,6 +8,10 @@ using vvi=vector<vector<int>>;
 using vb=vector<bool>;
 using pii=pair<int,int>;
 using vpii=vector<pair<int,int>>;
+using plli=pair<ll,int>;
+using vplli=vector<pair<ll,int>>;
+using pllll=pair<ll,ll>;
+using vpllll=vector<pair<ll,ll>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
@@ -28,42 +32,37 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    int n;
-    cin>>n;
-    int m;
-    cin>>m;
-    vpii res;
+    ll n,m;
+    cin>>n>>m;
+    vpii cut(m);
     rep(i,0,m){
-        int a,b;
-        cin>>a>>b;
-        a--,b--;
-        pii v=make_pair(b,a);
-        res.push_back(v);
+        int x,y;
+        cin>>x>>y;
+        x--,y--;
+        cut[i].first=y;
+        cut[i].second=x;
     }
-    sort(res.begin(),res.end());
-    int ans=0;
-    vpii sep;
+    sort(cut.begin(),cut.end());
+    vpii bridge;
     rep(i,0,m){
-        pii e=res[i];
-        int rcmp=res[i].first;
-        int lcmp=res[i].second;
-        int n=sep.size();
-        if(n==0)sep.push_back(e),ans++;
+        if(bridge.empty())bridge.push_back(cut[i]);
         else{
-            bool check=true;
-            rep(j,0,n){
-                int rv=sep[j].first;
-                int lv=sep[j].second;
-                if(rv<=lcmp)continue;
+            bool check=false;
+            rep(j,0,bridge.size()){
+                int bl=bridge[j].second;
+                int br=bridge[j].first;
+                int cl=cut[i].second;
+                int cr=cut[i].first;
+                if(br<=cl)continue;
                 else{
-                    chmax(lv,lcmp);
-                    check=false;
+                    chmax(br,cr);
+                    check=true;
                 }
             }
-            if(check)sep.push_back(e),ans++;
+            if(!check)bridge.push_back(cut[i]);
         }
     }
-    cout<<ans<<endl;
+    cout<<bridge.size()<<endl;
     return 0;
 }
 

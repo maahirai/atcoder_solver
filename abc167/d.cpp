@@ -8,6 +8,10 @@ using vvi=vector<vector<int>>;
 using vb=vector<bool>;
 using pii=pair<int,int>;
 using vpii=vector<pair<int,int>>;
+using plli=pair<ll,int>;
+using vplli=vector<pair<ll,int>>;
+using pllll=pair<ll,ll>;
+using vpllll=vector<pair<ll,ll>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
@@ -28,31 +32,32 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    ll N,K;
-    cin>>N>>K;
-    vi A(N);
-    rep(i,0,N)cin>>A[i],A[i]--;
-    vb bit(64,false);
-    ll highestbit=-1;
-    rep(i,0,64){
-        if((K>>i)&1){
-            bit[i]=true;
-            chmax(highestbit,i);
-        }
+    ll n;
+    cin>>n;
+    vi a(n);
+    ll k;
+    cin>>k;
+    rep(i,0,n)cin>>a[i],a[i]--;
+    vi cnt(n,-1);
+    int c=0;
+    int nxt=0;
+    vi visit;
+    while(cnt[nxt]==-1){
+        visit.push_back(nxt+1);
+        cnt[nxt]=c++;
+        nxt=a[nxt];
     }
-    vvll doubling(highestbit+1,vll(N,0));
-    rep(i,0,N){
-        doubling[0][i]=A[i];
+    //最初に町1に行くのは移動としてカウントされない
+    if(k<visit.size()){
+        cout<<visit[k]<<endl;
     }
-    rep(i,1,highestbit+1){
-        rep(j,0,N)
-            doubling[i][j]=doubling[i-1][doubling[i-1][j]];
+    else{
+        ll epi=cnt[nxt];
+        k-=epi;
+        ll loop=visit.size()-epi;
+        k%=loop;
+        cout<<visit[k+epi]<<endl;
     }
-    int now=0;
-    rep(i,0,highestbit+1){
-        if(bit[i])now=doubling[i][now];
-    }
-    cout<<now+1<<endl;
     return 0;
 }
 
