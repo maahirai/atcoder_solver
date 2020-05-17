@@ -8,6 +8,10 @@ using vvi=vector<vector<int>>;
 using vb=vector<bool>;
 using pii=pair<int,int>;
 using vpii=vector<pair<int,int>>;
+using plli=pair<ll,int>;
+using vplli=vector<pair<ll,int>>;
+using pllll=pair<ll,ll>;
+using vpllll=vector<pair<ll,ll>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
@@ -28,21 +32,25 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    ll N,K;
-    cin>>N>>K;
+    int n;
+    cin>>n;
+    int k;
+    cin>>k;
+    vll v(n);
+    rep(i,0,n)cin>>v[i];
     ll ans=-INF;
-    vi v(N);
-    rep(i,0,N)cin>>v[i];
-    rep(l,0,K+1){
-        rep(r,0,(K+1)-l){
+    rep(l,0,k+1){
+        rep(r,0,(k+1)-l){
+            if(l+r>n)continue;
+            ll throwaway=k-(l+r);
             ll res=0;
-            if(l+r>N)break;
-            priority_queue<int,vi,greater<int>>q;
-            rep(tl,0,l)res+=v[tl],q.push(v[tl]);
-            rep(tr,0,r)res+=v[N-1-tr],q.push(v[N-1-tr]);
-            rep(ta,0,K-(l+r)){
-                if(q.empty()==false&&q.top()<0)res-=q.top(),q.pop();
-                else break;
+            priority_queue<ll,vll,greater<ll>> q;
+            rep(i,0,l)q.push(v[i]),res+=v[i];
+            rep(j,0,r)q.push(v[n-1-j]),res+=v[n-1-j];
+            while(!q.empty()&&q.top()<0&&throwaway){
+                res-=q.top();
+                q.pop();
+                throwaway--;
             }
             chmax(ans,res);
         }
