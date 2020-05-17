@@ -8,6 +8,10 @@ using vvi=vector<vector<int>>;
 using vb=vector<bool>;
 using pii=pair<int,int>;
 using vpii=vector<pair<int,int>>;
+using plli=pair<ll,int>;
+using vplli=vector<pair<ll,int>>;
+using pllll=pair<ll,ll>;
+using vpllll=vector<pair<ll,ll>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
@@ -28,23 +32,30 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    ll N,M;
-    cin>>N>>M;
-    vpii payday(N);
-    rep(i,0,N){
-        cin>>payday[i].second>>payday[i].first;
+    ll n,m;
+    cin>>n;
+    cin>>m;
+    vpllll payday(n);
+    rep(i,0,n){
+        ll a,b;
+        cin>>a>>b;
+        payday[i].first=b;
+        payday[i].second=a;
     }
     sort(payday.rbegin(),payday.rend());
-    set<int> canwork;
-    rep(i,1,M+1)canwork.insert(i);
-    ll res=0;
-    rep(i,0,N){
-        auto pos=canwork.lower_bound(payday[i].second);
-        if(pos==canwork.end())continue;
-        canwork.erase(*pos);
-        res+=payday[i].first;
+    set<int> s;
+    rep(i,1,m+1){
+        s.insert(i);
     }
-    cout<<res<<endl;
+    ll ans=0;
+    rep(i,0,n){
+       auto p=s.lower_bound(payday[i].second);
+       if(p!=s.end()){
+           ans+=payday[i].first;
+           s.erase(p);
+       }
+    }
+    cout<<ans<<endl;
     return 0;
 }
 

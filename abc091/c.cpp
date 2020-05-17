@@ -28,25 +28,34 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    int N;
-    cin>>N;
-    vpii rxy(N);
-    vpii byx(N);
-    rep(i,0,N)cin>>rxy[i].first>>rxy[i].second;
-    rep(i,0,N)cin>>byx[i].second>>byx[i].first;
-    sort(rxy.begin(),rxy.end());
-    sort(byx.begin(),byx.end());
-    ll ans=0;
-    vb fixedr(N,false);
-    rep(bi,0,N){
-        int ci=-1;
-        rep(ri,0,N){
-            if(fixedr[ri])continue;
-            if(rxy[ri].first<byx[bi].second&&rxy[ri].second<byx[bi].first){
-                ci=ri;
+    int n;
+    cin>>n;
+    vpii r(n);
+    vpii b(n);
+    rep(i,0,n){
+        int a,b;
+        cin>>a>>b;
+        r[i].first=b;
+        r[i].second=a;
+    }
+    rep(i,0,n){
+        int x,y;
+        cin>>y>>x;
+        b[i].first=y;
+        b[i].second=x;
+    }
+    sort(r.begin(),r.end());
+    sort(b.begin(),b.end());
+    vb rused(n,false);
+    int ans=0;
+    rep(bi,0,n){
+        ll alt=-1;
+        rep(ai,0,n){
+            if(!rused[ai]&&b[bi].first>r[ai].second&&b[bi].second>r[ai].first){
+                chmax(alt,ai);
             }
         }
-        if(ci!=-1)fixedr[ci]=true,ans++;
+        if(alt!=-1)rused[alt]=true,ans++;
     }
     cout<<ans<<endl;
     return 0;
