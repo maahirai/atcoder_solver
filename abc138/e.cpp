@@ -8,6 +8,10 @@ using vvi=vector<vector<int>>;
 using vb=vector<bool>;
 using pii=pair<int,int>;
 using vpii=vector<pair<int,int>>;
+using plli=pair<ll,int>;
+using vplli=vector<pair<ll,int>>;
+using pllll=pair<ll,ll>;
+using vpllll=vector<pair<ll,ll>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
@@ -28,31 +32,26 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    string s;
-    cin>>s;
-    string t;
-    cin>>t;
-    ll loop=0,pos=0;
-    set<int> eachpos[26];
-    int sn=s.size(),tn=t.size();
+    string s,t;
+    cin>>s>>t;
+    vector<set<int>> set(26);
     rep(i,0,s.size()){
-        eachpos[s[i]-'a'].insert(i);
+        int idx=s[i]-'a';
+        set[idx].insert(i);
     }
+    ll a=0,b=0;
     rep(i,0,t.size()){
-        if(eachpos[t[i]-'a'].empty()){
+        int idx=t[i]-'a';
+        if(set[idx].empty()){
             cout<<-1<<endl;
             return 0;
         }
-        auto itr=eachpos[t[i]-'a'].lower_bound(pos);
-        if(itr==eachpos[t[i]-'a'].end()){
-            loop++;
-            pos=0;
-            itr=eachpos[t[i]-'a'].lower_bound(pos);
-        }
-        pos=*itr;
-        pos++;
+        auto p=set[idx].lower_bound(b);
+        if(p==set[idx].end())b=0,a++,p=set[idx].lower_bound(b);
+        b=*p;
+        b++;
     }
-    cout<<loop*sn+pos<<endl;
+    cout<<a*s.size()+b<<endl;
     return 0;
 }
 

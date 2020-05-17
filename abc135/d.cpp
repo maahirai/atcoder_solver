@@ -8,6 +8,10 @@ using vvi = vector<vector<int>>;
 using vb = vector<bool>;
 using pii = pair<int, int>;
 using vpii = vector<pair<int, int>>;
+using plli = pair<ll, int>;
+using vplli = vector<pair<ll, int>>;
+using pllll = pair<ll, ll>;
+using vpllll = vector<pair<ll, ll>>;
 
 template <class T>
 inline bool chmin(T &a, T b)
@@ -99,33 +103,35 @@ int main()
 {
     string s;
     cin >> s;
-    int n = s.size();
-    ll mod = 1e9 + 7;
-    //dp[桁][余り]
+    ll n = s.size();
     vvll dp(n + 1, vll(13, 0));
     dp[0][0] = 1;
+    ll mod=1e9+7;
     rep(i, 0, n)
     {
-        if (s[i] != '?')
+        if (s[i] == '?')
         {
-            int d = s[i] - '0';
-            rep(ld, 0, 13)
+            rep(fd, 0, 13)
             {
-                ll to = (ld * 10 + d) % 13;
-                dp[i + 1][to] += dp[i][ld];
-                dp[i+1][to]=((dp[i+1][to]%mod)+mod)%mod;
-            }
-        }
-        else{
-            rep(now,0,10){
-                rep(ld,0,13){
-                    ll to=(ld*10+now)%13;
-                    dp[i+1][to]+=dp[i][ld];
-                    dp[i+1][to]=((dp[i+1][to]%mod)+mod)%mod;
+                rep(now, 0, 10)
+                {
+                    ll to = (fd * 10 + now) % 13;
+                    dp[i + 1][to] += dp[i][fd];
+                    dp[i+1][to]=(dp[i+1][to]%mod+mod)%mod;
                 }
             }
         }
+        else
+        {
+            ll now = s[i] - '0';
+            rep(fd, 0, 13)
+            {
+                ll to = (fd * 10 + now) % 13;
+                dp[i + 1][to] += dp[i][fd];
+                dp[i+1][to]=(dp[i+1][to]%mod+mod)%mod;
+            }
+        }
     }
-    cout<<dp[n][5]<<endl;
+    cout << dp[n][5] << endl;
     return 0;
 }

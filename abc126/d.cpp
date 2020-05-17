@@ -8,6 +8,8 @@ using vvi=vector<vector<int>>;
 using vb=vector<bool>;
 using pii=pair<int,int>;
 using vpii=vector<pair<int,int>>;
+using plli=pair<ll,int>;
+using vplli=vector<pair<ll,int>>;
 using pllll=pair<ll,ll>;
 using vpllll=vector<pair<ll,ll>>;
 
@@ -30,38 +32,38 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    int N;
-    cin>>N;
-    vpii cone[N];
-    rep(i,0,N-1){
-        int u,v,w;
+    ll n;
+    cin>>n;
+    vpllll conne[n];
+    rep(i,0,n-1){
+        ll u,v,w;
         cin>>u>>v>>w;
         u--,v--;
-        pii ev=make_pair(u,w);
-        pii eu=make_pair(v,w);
-        cone[u].push_back(eu);
-        cone[v].push_back(ev);
+        pllll e=make_pair(u,w);
+        conne[v].push_back(e);
+        e.first=v;
+        conne[u].push_back(e);
     }
-    priority_queue<pllll,vector<pllll>,greater<pllll>> q;
-    q.emplace(0,0);
-    vll dist(N,INF);
-    vb fixed(N,false);
+    vll dist(n,INF);
     dist[0]=0;
-    while(!q.empty()){
+    priority_queue<pllll,vpllll,greater<pllll>> q;
+    q.emplace(0,0);
+    ll cnt=0;
+    while(cnt<n&&!q.empty()){
         pllll e=q.top(); q.pop();
-        ll idx=e.second;
-        ll d=e.first;
-        fixed[idx]=true;
-        for(auto nxt:cone[e.second]){
-            ll nidx=nxt.first;
-            ll add=nxt.second;
-            if(fixed[nidx])continue;
-            ll nd=add+d;
-            chmin(dist[nidx],nd);
-            q.emplace(nd,nidx);
+        chmin(dist[e.second],e.first);
+        cnt++;
+        for(auto p:conne[e.second]){
+            ll ndist=p.second+e.first;
+            ll nidx=p.first;
+            if(dist[nidx]!=INF)continue;
+            q.emplace(ndist,nidx);
         }
     }
-    rep(i,0,N)cout<<dist[i]%2<<endl;
+    rep(i,0,n){
+        if(dist[i]%2==0)cout<<0<<endl;
+        else cout<<1<<endl;
+    }
     return 0;
 }
 
