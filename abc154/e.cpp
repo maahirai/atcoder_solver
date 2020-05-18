@@ -2,7 +2,16 @@
 using namespace std;
 typedef  long long ll;
 using vll=vector<ll>;
+using vvll=vector<vll>;
 using vi=vector<int>;
+using vvi=vector<vector<int>>;
+using vb=vector<bool>;
+using pii=pair<int,int>;
+using vpii=vector<pair<int,int>>;
+using plli=pair<ll,int>;
+using vplli=vector<pair<ll,int>>;
+using pllll=pair<ll,ll>;
+using vpllll=vector<pair<ll,ll>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
@@ -17,50 +26,37 @@ template<class T> inline T lcm(T x,T y){return x/gcd(x,y)*y;}
 //逆元
 long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while (b) {long long t = a / b;a -= t * b; swap(a, b);u -= t * v; swap(u, v);}u %= m;if (u < 0) u += m;return u;}
 
-#define rep(i,n) for(ll i=0;i<(ll)n;i++)
-#define rep2(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
+#define rep(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
+//試験導入
+#define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
 
 long long INF = 1LL<<60;
-
-string s;int K;
-int comb(int n,int k){
-    if(k<0||n<k)return 0;
-
-    if(k==1)return n;
-    else if(k==2)return n*(n-1)/2;
-    else return n*(n-1)*(n-2)/6;
-}
-
-int solve(bool smaller,int i,int k){
-    int n=s.size();
-    if(i==n){
-        if(k==0)return 1;
-        else return 0;
-    }
-    if(k==0)return 1;
-
-    if(smaller){
-        return comb((n-i),k)*pow(9,k);
-    }
-    else{
-        int v=s.at(i)-'0';
-        if(v==0){
-            return solve(false,i+1,k);
-        }
-        else {
-        int aida,zero,pitta;
-        aida=solve(true,i+1,k-1)*(v-1);
-        zero=solve(true,i+1,k);
-        pitta=solve(false,i+1,k-1);
-        return aida+zero+pitta;
-        }
-    }
-}
 int main( ){
-    cin>>s>>K;
-    ll ans=0;
-    ans=solve(false,0,K);
-    cout<<ans<<endl;
+    string S;
+    ll K;
+    cin>>S>>K;
+    int  s=S.size();
+    //何文字目，そのままなら0,使った0の数
+    vector<vvll> dp(s+1,vvll(2,vll(K+1,0)));
+    dp[0][0][0]=1;
+    rep(i,0,s){
+        rep(j,0,2){
+            rep(k,0,4){
+                rep(l,0,10){
+                    int d=S[i]-'0';
+                    int ni=i+1;int nj=j;int nk=k;
+                    if(l!=0)nk++;
+                    if(nk>K)continue;
+                    if(j==0){
+                        if(d<l)continue;
+                        if(d>l)nj=1;
+                    }
+                    dp[ni][nj][nk]+=dp[i][j][k];
+                }
+            }
+        }
+    }
+    cout<<dp[s][0][K]+dp[s][1][K]<<endl;
     return 0;
 }
 
