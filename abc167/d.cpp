@@ -32,31 +32,28 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    ll n;
+    int n;
     cin>>n;
-    vi a(n);
     ll k;
     cin>>k;
+    vi a(n);
     rep(i,0,n)cin>>a[i],a[i]--;
-    vi cnt(n,-1);
-    int c=0;
-    int nxt=0;
-    vi visit;
-    while(cnt[nxt]==-1){
-        visit.push_back(nxt+1);
-        cnt[nxt]=c++;
-        nxt=a[nxt];
+    vi vis(n,-1);
+    int to=0;
+    int cnt=0;
+    vi visited;
+    while(vis[to]==-1){
+       visited.push_back(to+1);
+       vis[to]=cnt++;
+       to=a[to];
     }
-    //最初に町1に行くのは移動としてカウントされない
-    if(k<visit.size()){
-        cout<<visit[k]<<endl;
-    }
+    int loopS=cnt-vis[to];
+    if(k<visited.size())cout<<visited[k];
     else{
-        ll epi=cnt[nxt];
+        int epi=vis[to];
         k-=epi;
-        ll loop=visit.size()-epi;
-        k%=loop;
-        cout<<visit[k+epi]<<endl;
+        k%=loopS;
+        cout<<visited[k+epi]<<endl;
     }
     return 0;
 }

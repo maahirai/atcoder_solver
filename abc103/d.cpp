@@ -32,37 +32,34 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    ll n,m;
-    cin>>n>>m;
-    vpii cut(m);
+    int n;
+    cin>>n;
+    int m;
+    cin>>m;
+    vpii conne(m);
     rep(i,0,m){
-        int x,y;
-        cin>>x>>y;
-        x--,y--;
-        cut[i].first=y;
-        cut[i].second=x;
+        int a,b;
+        cin>>a>>b;
+        conne[i].first=a;
+        conne[i].second=b;
     }
-    sort(cut.begin(),cut.end());
-    vpii bridge;
+    sort(conne.begin(),conne.end());
+    vpii cut;
     rep(i,0,m){
-        if(bridge.empty())bridge.push_back(cut[i]);
+        if(cut.size()==0)cut.push_back(conne[i]);
         else{
-            bool check=false;
-            rep(j,0,bridge.size()){
-                int bl=bridge[j].second;
-                int br=bridge[j].first;
-                int cl=cut[i].second;
-                int cr=cut[i].first;
-                if(br<=cl)continue;
-                else{
-                    chmax(br,cr);
-                    check=true;
-                }
+            bool ok=false;
+        rep(j,0,cut.size()){
+            if(cut[j].second>conne[i].first){
+                chmin(cut[j].second,conne[i].second);
+                ok=true;
             }
-            if(!check)bridge.push_back(cut[i]);
+            if(ok)break;
         }
+        if(!ok)cut.push_back(conne[i]);
+       }
     }
-    cout<<bridge.size()<<endl;
+    cout<<cut.size()<<endl;
     return 0;
 }
 
