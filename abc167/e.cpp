@@ -32,21 +32,21 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 //最初に設定する.
-const int MAX = 510000; const ll MOD = 998244353;
+const ll MOD=998244353;
+const int  MAX = 510000;
 long long fac[MAX], finv[MAX], inv[MAX];  void modcinit() { fac[0] = fac[1] = 1; finv[0] = finv[1] = 1; inv[1] = 1; for (int i = 2; i < MAX; i++){ fac[i] = fac[i - 1] * i % MOD; inv[i] = MOD - inv[MOD%i] * (MOD / i) % MOD; finv[i] = finv[i - 1] * inv[i] % MOD; } } long long modc(int n, int k){ if (n < k) return 0; if (n < 0 || k < 0) return 0; return fac[n] * (finv[k] * finv[n - k] % MOD) % MOD; }
 int main( ){
-    ll n,m;
-    cin>>n>>m;
-    ll k;
-    cin>>k;
     modcinit();
-    ll mod=998244353;
-    ll res=0;
-    rep(i,0,k+1){
-        ll add=(((m*modc(n-1,i)%mod)+mod)%mod*modpow(m-1,n-1-i,mod)%mod+mod)%mod;
-        res=((res+add)%mod+mod)%mod;
+    ll N,M;
+    ll K;
+    cin>>N>>M>>K;
+    ll ans=0;
+    ll mod=MOD;
+    rep(i,0,K+1){
+       ll add=((M*modc(N-1,i)%mod+mod)%mod*modpow(M-1,N-1-i,mod)%mod+mod)%mod;
+       ans=((add+ans)%mod+mod)%mod;
     }
-    cout<<res<<endl;
+    cout<<ans<<endl;
     return 0;
 }
 
