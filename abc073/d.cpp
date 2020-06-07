@@ -31,51 +31,52 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 #define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
 
 long long INF = 1LL<<60;
-ll dp[210][210];
 int main( ){
-    rep(i,0,210)rep(j,0,210)if(i!=j)dp[i][j]=INF;else dp[i][j]=0;
-    int n;
-    cin>>n;
-    int m;
-    cin>>m;
+    int N,M;
+    cin>>N>>M;
     int R;
     cin>>R;
-    rep(i,0,n){
-        dp[i][i]=0;
-    }
     vi r;
-    rep(i,0,R){
-        int v;
-        cin>>v;
-        v--;
-        r.push_back(v);
+    ll wf[N][N];
+    rep(i,0,N){
+        rep(j,0,N){
+            if(i==j)wf[i][j]=0;
+            else wf[i][j]=INF;
+        }
     }
-    sort(r.begin(),r.end());
-    rep(i,0,m){
+    rep(i,0,R){
+        int t;
+        cin>>t;
+        t--;
+        r.push_back(t);
+    }
+    vpii conne[N];
+    rep(i,0,M){
         int a,b;
         cin>>a>>b;
         a--,b--;
-        ll c;
+        int c;
         cin>>c;
-        dp[a][b]=c;
-        dp[b][a]=c;
+        wf[a][b]=c;
+        wf[b][a]=c;
     }
-    rep(i,0,n){
-        rep(j,0,n){
-            rep(k,0,n){
-                chmin(dp[j][k],dp[j][i]+dp[i][k]);
+    rep(i,0,N){
+        rep(j,0,N){
+            rep(k,0,N){
+                chmin(wf[j][k],wf[j][i]+wf[i][k]);
             }
         }
     }
-    ll res=INF;
-     do{
-        ll  ans=0;
-        rep(i,0,R-1){
-        ans+=dp[r[i]][r[i+1]];
+    sort(r.begin(),r.end());
+    ll ans=INF;
+    do{
+        ll res=0;
+        rep(i,0,r.size()-1){
+            res+=wf[r[i]][r[i+1]];
         }
-        chmin(res,ans);
+        chmin(ans,res);
     }while(next_permutation(r.begin(),r.end()));
-    cout<<res<<endl;
+    cout<<ans<<endl;
     return 0;
 }
 
