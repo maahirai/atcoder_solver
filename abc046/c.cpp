@@ -31,27 +31,20 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 #define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
 
 long long INF = 1LL<<60;
-ll dp[55][5050];
 int main( ){
-    int n,a;
-    cin>>n>>a;
-    vi x(n);
-    int X=a;
-    rep(i,0,n)cin>>x[i],chmax(X,x[i]),x[i]-=a;
-    dp[0][n*X]=1;
+    int n;
+    cin>>n;
+    vi t(n),a(n);
+    rep(i,0,n)cin>>t[i]>>a[i];
+    ll ans=2;
+    ll A=1,T=1;
     rep(i,0,n){
-        rep(j,0,2*X*n+1){
-            int ni=i+1;
-            int nj=j+x[i];
-            if(0<=nj&&nj<=X*n*2)
-                dp[ni][nj]=dp[i][nj]+dp[i][j];
-            else
-            {
-                dp[ni][j]=dp[i][j];
-            }
-        }
+        ll ti=(T+(t[i]-1))/t[i];
+        ll ai=(A+(a[i]-1))/a[i];
+        ll c=max(ti,ai);
+        T=c*t[i],A=c*a[i];
     }
-    cout<<dp[n][n*X]-1<<endl;
+    cout<<T+A<<endl;
     return 0;
 }
 
