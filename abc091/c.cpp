@@ -8,6 +8,10 @@ using vvi=vector<vector<int>>;
 using vb=vector<bool>;
 using pii=pair<int,int>;
 using vpii=vector<pair<int,int>>;
+using plli=pair<ll,int>;
+using vplli=vector<pair<ll,int>>;
+using pllll=pair<ll,ll>;
+using vpllll=vector<pair<ll,ll>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
@@ -30,32 +34,37 @@ long long INF = 1LL<<60;
 int main( ){
     int n;
     cin>>n;
-    vpii r(n);
-    vpii b(n);
+    vpii red,blue;
     rep(i,0,n){
-        int a,b;
-        cin>>a>>b;
-        r[i].first=b;
-        r[i].second=a;
+        int x,y;
+        cin>>x>>y;
+        pii e;
+        e.first=x;
+        e.second=y;
+        red.push_back(e);
     }
     rep(i,0,n){
         int x,y;
-        cin>>y>>x;
-        b[i].first=y;
-        b[i].second=x;
+        cin>>x>>y;
+        pii e;
+        e.first=y;
+        e.second=x;
+        blue.push_back(e);
     }
-    sort(r.begin(),r.end());
-    sort(b.begin(),b.end());
-    vb rused(n,false);
-    int ans=0;
+    sort(red.begin(),red.end());
+    sort(blue.begin(),blue.end());
+    bool fixed[n];
+    fill(fixed,fixed+n,false);
+    ll ans=0;
     rep(bi,0,n){
-        ll alt=-1;
-        rep(ai,0,n){
-            if(!rused[ai]&&b[bi].first>r[ai].second&&b[bi].second>r[ai].first){
-                chmax(alt,ai);
-            }
+        int bx=blue[bi].second,by=blue[bi].first;
+        int alt=-1;
+        rep(ri,0,n){
+            if(fixed[ri])continue;
+            int rx=red[ri].first,ry=red[ri].second;
+            if(bx>rx&&by>ry)alt=ri;
         }
-        if(alt!=-1)rused[alt]=true,ans++;
+        if(alt!=-1)fixed[alt]=true,ans++;
     }
     cout<<ans<<endl;
     return 0;

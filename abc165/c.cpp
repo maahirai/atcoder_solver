@@ -8,6 +8,10 @@ using vvi=vector<vector<int>>;
 using vb=vector<bool>;
 using pii=pair<int,int>;
 using vpii=vector<pair<int,int>>;
+using plli=pair<ll,int>;
+using vplli=vector<pair<ll,int>>;
+using pllll=pair<ll,ll>;
+using vpllll=vector<pair<ll,ll>>;
 
 template<class T> inline bool chmin(T& a, T b) {if (a > b) {a = b;return true;}return false;}
 template<class T> inline bool chmax(T& a, T b) {if (a < b) {a = b;return true;}return false;}
@@ -28,28 +32,27 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    ll n,m;
-    cin>>n>>m;
-    ll q;
-    cin>>q;
-    vi a(q),b(q),c(q),d(q);
-    rep(i,0,q)cin>>a[i]>>b[i]>>c[i]>>d[i],a[i]--,b[i]--;
-    vi res(n+m-1,1);
-    rep(i,0,m-1)res[i]=0;
+    int N,M,Q;
+    cin>>N>>M>>Q;
+    vi res(N+M-1,1);
+    rep(i,0,N)res[i]=0;
+    vi a(Q),b(Q),c(Q),d(Q);
+    rep(i,0,Q)cin>>a[i]>>b[i]>>c[i]>>d[i];
     ll ans=0;
     do{
-        vi A(n,1);
+        vi A(N+1,1);
         int cnt=0;
-        int Ai=0;
-        rep(i,0,n+m-1){
-            if(!res[i])cnt++;
-            else A[Ai++]+=cnt;
+        int p=1;
+        rep(i,0,N+M-1){
+            if(res[i]==0)A[p++]+=cnt;
+            else cnt++;
         }
-        ll tmp=0;
-        rep(i,0,q){
-            if(A[b[i]]-A[a[i]]==c[i])tmp+=d[i];
+        ll res=0;
+        rep(i,0,Q){
+            if(A[b[i]]-A[a[i]]==c[i])
+                res+=d[i];
         }
-        chmax(ans,tmp);
+        chmax(ans,res);
     }while(next_permutation(res.begin(),res.end()));
     cout<<ans<<endl;
     return 0;
