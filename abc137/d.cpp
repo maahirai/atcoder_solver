@@ -32,28 +32,29 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    ll n,m;
-    cin>>n;
-    cin>>m;
-    vpllll payday(n);
+    int n,m;
+    cin>>n>>m;
+    set<int> rest;
+    rep(i,1,m+1)rest.insert(i);
+    vpii payday;
     rep(i,0,n){
-        ll a,b;
+        int a,b;
         cin>>a>>b;
-        payday[i].first=b;
-        payday[i].second=a;
+        pii e;
+        e.first=b;
+        e.second=a;
+        payday.push_back(e);
     }
     sort(payday.rbegin(),payday.rend());
-    set<int> s;
-    rep(i,1,m+1){
-        s.insert(i);
-    }
     ll ans=0;
     rep(i,0,n){
-       auto p=s.lower_bound(payday[i].second);
-       if(p!=s.end()){
-           ans+=payday[i].first;
-           s.erase(p);
-       }
+        int pay=payday[i].first;
+        int day=payday[i].second;
+        auto pos=rest.lower_bound(day);
+        if(pos!=rest.end()){
+            rest.erase(pos);
+            ans+=pay;
+        }
     }
     cout<<ans<<endl;
     return 0;

@@ -36,25 +36,27 @@ int main( ){
     cin>>n;
     int k;
     cin>>k;
-    vll v(n);
+    vi v(n);
     rep(i,0,n)cin>>v[i];
     ll ans=-INF;
-    rep(l,0,k+1){
-        rep(r,0,(k+1)-l){
-            if(l+r>n)continue;
-            ll throwaway=k-(l+r);
-            ll res=0;
-            priority_queue<ll,vll,greater<ll>> q;
-            rep(i,0,l)q.push(v[i]),res+=v[i];
-            rep(j,0,r)q.push(v[n-1-j]),res+=v[n-1-j];
-            while(!q.empty()&&q.top()<0&&throwaway){
-                res-=q.top();
-                q.pop();
-                throwaway--;
+    rep(r,0,k+1){
+        rep(l,0,k+1-r){
+                if(r+l>n)continue;
+                priority_queue<int,vi,greater<int>> q;
+                ll ta=k-(r+l);
+                ll res=0;
+                rep(i,0,r)q.push(v[n-1-i]),res+=v[n-1-i];
+                rep(i,0,l)q.push(v[i]),res+=v[i];
+                rep(i,0,ta){
+                    if(!q.empty()&&q.top()<0){
+                        int minus=q.top();
+                        q.pop();
+                        res-=minus;
+                    }
+                }
+                chmax(ans,res);
             }
-            chmax(ans,res);
         }
-    }
     cout<<ans<<endl;
     return 0;
 }
