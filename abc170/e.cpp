@@ -31,42 +31,42 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 #define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
 
 long long INF = 1LL<<60;
-multiset<int,greater<int>> kindar[200010];
+multiset<int,greater<int>> s[200010];
 int main( ){
-    multiset<int> daihyo;
     ll N,Q;
     cin>>N>>Q;
-    vi a(N+5),b(N+5);
-    rep(j,0,N){
-        int i=j+1;
-        cin>>a[i]>>b[i];
-        kindar[b[i]].insert(a[i]);
+    vi rate(N),kinder(N);
+    multiset<int> top;
+    rep(i,0,N){
+        cin>>rate[i]>>kinder[i];
+        s[kinder[i]].insert(rate[i]);
     }
     rep(i,0,200010){
-        if(!kindar[i].empty()){
-            daihyo.insert(*kindar[i].begin());
-        }
+        if(s[i].empty())continue;
+        top.insert(*s[i].begin());
     }
     rep(i,0,Q){
-        ll c,d;
-        cin>>c>>d;
-        auto pos=daihyo.find(*kindar[b[c]].begin());
-        daihyo.erase(pos);
-        if(!kindar[d].empty()){
-            pos=daihyo.find(*kindar[d].begin());
-            daihyo.erase(pos);
+        ll idx,moveto;
+        cin>>idx>>moveto;
+        idx--;
+        auto pos=top.find(*s[kinder[idx]].begin());
+        top.erase(pos);
+        if(s[moveto].empty()==false){
+            pos=top.find(*s[moveto].begin());
+            top.erase(pos);
         }
 
-        pos=kindar[b[c]].find(a[c]);
-        kindar[b[c]].erase(pos);
-        kindar[d].insert(a[c]);
+        pos=s[kinder[idx]].find(rate[idx]);
+        s[kinder[idx]].erase(pos);
+        s[moveto].insert(rate[idx]);
 
-        if(!kindar[b[c]].empty())
-            daihyo.insert(*kindar[b[c]].begin());
-        daihyo.insert(*kindar[d].begin());
-
-        b[c]=d;
-        cout<<*daihyo.begin()<<endl;
+        if(s[kinder[idx]].empty()==false){
+            int v=*s[kinder[idx]].begin();
+            top.insert(v);
+        }
+        top.insert(*s[moveto].begin());
+        kinder[idx]=moveto;
+        cout<<*top.begin()<<endl;
     }
     return 0;
 }

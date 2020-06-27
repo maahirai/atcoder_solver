@@ -29,22 +29,22 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 #define rep(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
 //試験導入
 #define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
-template <class T> bool is_prime(T IN) { if (IN <= 1) return false; for (long long i = 2; i * i <= IN; i++) { if (IN % i == 0) { return false; } } return true; } template <class T> vector<pair<long long, long long>> primefact(T x) { vector<pair<long long, long long>> ret; ll cpyx=x; for (long long i = 1; i * i <= x; i++) { if (x % i == 0) { vector<long long> alt = {i, x / i}; if (alt[0] == alt[1]) alt[1] = 1; for (long long j = 0; j < alt.size(); j++) { if (is_prime(alt[j])) { pair<long long, long long> t = make_pair(alt[j], 0); while (cpyx % alt[j] == 0) { cpyx /= alt[j]; t.second++; } ret.push_back(t); } } } } return ret; }
+
 long long INF = 1LL<<60;
+ll const mod=1e9+7;
+template <class T> bool is_prime(T IN) { if (IN <= 1) return false; for (long long i = 2; i * i <= IN; i++) { if (IN % i == 0) { return false; } } return true; } template <class T> vector<pair<long long, long long>> primefact(T x) { vector<pair<long long, long long>> ret; ll cpyx=x; for (long long i = 1; i * i <= x; i++) { if (x % i == 0) { vector<long long> alt = {i, x / i}; if (alt[0] == alt[1]) alt[1] = 1; for (long long j = 0; j < alt.size(); j++) { if (is_prime(alt[j])) { pair<long long, long long> t = make_pair(alt[j], 0); while (cpyx % alt[j] == 0) { cpyx /= alt[j]; t.second++; } ret.push_back(t); } } } } return ret; }
 //最初に設定する.
-//modcinit()呼び出し．
 const int MAX = 510000; const int MOD = 1000000007;
-long long fac[MAX], finv[MAX], inv[MAX];  void modcinit() { fac[0] = fac[1] = 1; finv[0] = finv[1] = 1; inv[1] = 1; for (int i = 2; i < MAX; i++){ fac[i] = fac[i - 1] * i % MOD; inv[i] = MOD - inv[MOD%i] * (MOD / i) % MOD; finv[i] = finv[i - 1] * inv[i] % MOD; } } long long modc(int n, int k){ if (n < k) return 0; if (n < 0 || k < 0) return 0; return fac[n] * (finv[k] * finv[n - k] % MOD) % MOD; }
+ bool is_modcinit=false;
+long long fac[MAX], finv[MAX], inv[MAX];  void modcinit() { is_modcinit=true; fac[0] = fac[1] = 1; finv[0] = finv[1] = 1; inv[1] = 1; for (int i = 2; i < MAX; i++){ fac[i] = fac[i - 1] * i % MOD; inv[i] = MOD - inv[MOD%i] * (MOD / i) % MOD; finv[i] = finv[i - 1] * inv[i] % MOD; } } long long modc(int n, int k){ if (n < k) return 0; if (n < 0 || k < 0) return 0; if(!is_modcinit)modcinit(); return fac[n] * (finv[k] * finv[n - k] % MOD) % MOD; }
 int main( ){
     ll n,m;
     cin>>n>>m;
-    vpllll pf=primefact(m);
+    vpllll res=primefact(m);
     ll ans=1;
-    ll mod=1e9+7;
-    modcinit();
-    for(auto e:pf){
+    for(pllll e:res){
         ans*=modc(e.second+n-1,n-1);
-        ans=((ans%mod)+mod)%mod;
+        ans=(ans%mod+mod)%mod;
     }
     cout<<ans<<endl;
     return 0;

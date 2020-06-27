@@ -32,29 +32,21 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    int n;
-    cin>>n;
-    ll k;
-    cin>>k;
-    vi a(n);
-    rep(i,0,n)cin>>a[i],a[i]--;
-    vi vis(n,-1);
-    int to=0;
-    int cnt=0;
-    vi visited;
-    while(vis[to]==-1){
-       visited.push_back(to+1);
-       vis[to]=cnt++;
-       to=a[to];
+    ll N;
+    cin>>N;
+    ll K;
+    cin>>K;
+    vvi doubling(N+1,vi (64,0));
+    rep(i,1,N+1)cin>>doubling[i][0];
+    rep(j,1,64){
+        rep(i,1,N+1)
+            doubling[i][j]=doubling[doubling[i][j-1]][j-1];
     }
-    int loopS=cnt-vis[to];
-    if(k<visited.size())cout<<visited[k];
-    else{
-        int epi=vis[to];
-        k-=epi;
-        k%=loopS;
-        cout<<visited[k+epi]<<endl;
+    int ans=1;
+    rep(i,0,64){
+        if(K>>i&1)ans=doubling[ans][i];
     }
+    cout<<ans<<endl;
     return 0;
 }
 
