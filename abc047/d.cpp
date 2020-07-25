@@ -31,30 +31,52 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 #define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
 
 long long INF = 1LL<<60;
+
+struct UnionFind { vector<int> d; UnionFind(int n=0): d(n,-1) {} int find(int x) { if (d[x] < 0) return x; return d[x] = find(d[x]); } bool unite(int x, int y) { x = find(x); y = find(y); if (x == y) return false; if (d[x] > d[y]) swap(x,y); d[x] += d[y]; d[y] = x; return true; } bool same(int x, int y) { return find(x) == find(y);} int size(int x) { return -d[find(x)];} };
 int main( ){
-    int n;
-    cin>>n;
-    vpii ab(n),cd(n);
-    rep(i,0,n)cin>>ab[i].first>>ab[i].second;
-    rep(i,0,n)cin>>cd[i].second>>cd[i].first;
-    sort(ab.begin(),ab.end());
-    sort(cd.begin(),cd.end());
-    vb is_emp(n,true);
-    int cnt=0;
-    rep(bi,0,n){
-        int alt=-1;
-        rep(ri,0,n){
-            //極力小さいdで，極力大きいaを相手したい．
-            if(is_emp[ri]&&ab[ri].first<cd[bi].second&&ab[ri].second<cd[bi].first){
-                alt=ri;
+    ll N;
+    cin>>N;
+    vi a(N);
+    ll T;
+    cin>>T;
+    rep(i,0,N)cin>>a[i];
+    int max[N];
+    int min[N];
+    int mv=0;
+    irep(i,0,N){
+        chmax(mv,a[i]);
+        max[i]=mv;
+    }
+    rep(i,0,N){
+        chmin(mv,a[i]);
+        min[i]=mv;
+    }
+    int dif=0;
+    rep(i,0,N-1){
+        chmax(dif,max[i+1]-min[i]);
+    }
+    int ans=0;
+    UnionFind uf(N);
+    rep(i,0,N-1){
+        auto b=a.begin(),e=a.end();
+        b+=i;
+        if((b=lower_bound(b,e,a[i]+dif))==a.end())continue;
+        int idx=distance(a.begin(),b);
+        uf.unite(i,idx);
+    }
+    set<int> p;
+    rep(i,0,N){
+        if(uf.size(i)>1){
+            if(p.count(uf.find(i))==0){
+                p.insert(uf.find(i));
             }
         }
-        if(alt!=-1){
-            is_emp[alt]=false;
-            cnt++;
-        }
     }
-    cout<<cnt<<endl;
+    cout<<dif<<endl;
+    for(int idx:p){
+        ans+=uf.size(idx)/2;
+    }
+    cout<<ans<<endl;
     return 0;
 }
 

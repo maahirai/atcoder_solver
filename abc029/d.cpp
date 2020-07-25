@@ -31,31 +31,35 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 #define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
 
 long long INF = 1LL<<60;
-int main( ){
-    int n;
-    cin>>n;
-    vpii ab(n),cd(n);
-    rep(i,0,n)cin>>ab[i].first>>ab[i].second;
-    rep(i,0,n)cin>>cd[i].second>>cd[i].first;
-    sort(ab.begin(),ab.end());
-    sort(cd.begin(),cd.end());
-    vb is_emp(n,true);
-    int cnt=0;
-    rep(bi,0,n){
-        int alt=-1;
-        rep(ri,0,n){
-            //極力小さいdで，極力大きいaを相手したい．
-            if(is_emp[ri]&&ab[ri].first<cd[bi].second&&ab[ri].second<cd[bi].first){
-                alt=ri;
+// digit,cnt1,inc1
+ll dp[12][12][2];
+int main(){
+    string S;
+    cin>>S;
+    int n=S.size();
+    dp[0][0][1]=1;
+    rep(i,0,n){
+        int v=S[i]-'0';
+        rep(same,0,2){
+            rep(cnt1,0,10){
+                rep(d,0,10){
+                    int ni=i+1,nsame=same,ncnt1=cnt1;
+                    if(same){
+                        if(d>v)break;
+                        else if(d<v)nsame=0;
+                    }
+                    if(d==1)ncnt1++;
+                    dp[ni][ncnt1][nsame]+=dp[i][cnt1][same];
+                }
             }
         }
-        if(alt!=-1){
-            is_emp[alt]=false;
-            cnt++;
-        }
     }
-    cout<<cnt<<endl;
+    int ans=0;
+    rep(cnt,1,n+1){
+        rep(same,0,2)
+            ans+=dp[n][cnt][same]*cnt;
+    }
+    cout<<ans<<endl;
     return 0;
 }
-
 
