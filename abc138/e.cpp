@@ -32,29 +32,29 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 
 long long INF = 1LL<<60;
 int main( ){
-    set<int> s[50];
-    string S,T;
-    cin>>S>>T;
-    int n=S.size();
-    rep(i,0,n){
-        s[S[i]-'a'].insert(i);
+    string s,t;
+    cin>>s>>t;
+    set<int> st[26];
+    rep(i,0,s.size()){
+        int c=s[i]-'a';
+        st[c].insert(i);
     }
     ll a=0,b=0;
-    int ts=T.size();
-    rep(i,0,ts){
-        int c=T[i]-'a';
-        if(s[c].empty()){
+    rep(i,0,t.size()){
+        int c=t[i]-'a';
+        if(st[c].empty()){
             cout<<-1<<endl;
             return 0;
         }
-        auto pos=s[c].lower_bound(b);
-        if(pos==s[c].end()){
-            a++,b=0;
-            pos=s[c].lower_bound(b);
+        auto pos=st[c].lower_bound(b);
+        if(pos==st[c].end()){
+            b=0;
+            a++;
+            pos=st[c].lower_bound(b);
         }
         b=*pos+1;
     }
-    cout<<a*n+b<<endl;
+    cout<<s.size()*a+b<<endl;
     return 0;
 }
 
