@@ -35,37 +35,43 @@ multiset<int,greater<int>> s[200010];
 int main( ){
     ll N,Q;
     cin>>N>>Q;
-    vi rate(N),kinder(N);
+    vi rate(N),kind(N);
+    rep(i,0,N)cin>>rate[i]>>kind[i];
     multiset<int> top;
     rep(i,0,N){
-        cin>>rate[i]>>kinder[i];
-        s[kinder[i]].insert(rate[i]);
+        s[kind[i]].insert(rate[i]);
     }
     rep(i,0,200010){
         if(s[i].empty())continue;
         top.insert(*s[i].begin());
     }
     rep(i,0,Q){
-        ll idx,moveto;
-        cin>>idx>>moveto;
+        int idx,mvto;
+        cin>>idx>>mvto;
         idx--;
-        auto pos=top.find(*s[kinder[idx]].begin());
-        top.erase(pos);
-        if(s[moveto].empty()==false){
-            pos=top.find(*s[moveto].begin());
-            top.erase(pos);
+        int from=kind[idx];
+        //両方のtop削除
+        auto e=top.find(*s[from].begin());
+        top.erase(e);
+        if(s[mvto].empty()==false){
+            //移動先top削除
+            e=top.find(*s[mvto].begin());
+            top.erase(e);
         }
+        //s内削除
+        e=s[from].find(rate[idx]);
+        s[from].erase(e);
 
-        pos=s[kinder[idx]].find(rate[idx]);
-        s[kinder[idx]].erase(pos);
-        s[moveto].insert(rate[idx]);
+        //移動先に挿入
+        s[mvto].insert(rate[idx]);
+        kind[idx]=mvto;
 
-        if(s[kinder[idx]].empty()==false){
-            int v=*s[kinder[idx]].begin();
-            top.insert(v);
-        }
-        top.insert(*s[moveto].begin());
-        kinder[idx]=moveto;
+        //移動先のトップ追加
+        top.insert(*s[mvto].begin());
+        //sのトップ追加
+        if(s[from].empty()==false)
+            top.insert(*s[from].begin());
+
         cout<<*top.begin()<<endl;
     }
     return 0;
