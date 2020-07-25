@@ -29,29 +29,30 @@ long long modinv(long long a, long long m) {long long b = m, u = 1, v = 0;while 
 #define rep(i, begin_i, end_i) for (ll i = (ll)begin_i; i < (ll)end_i; i++)
 //試験導入
 #define irep(i, end_i, begin_i) for (ll i = (ll)begin_i-1; i >= (ll)end_i; i--)
-int a[200010],b[200010];
-ll N,M,K;
+
 long long INF = 1LL<<60;
 int main( ){
-    cin>>N>>M>>K;
-    rep(i,0,N)cin>>a[i];
-    rep(j,0,M)cin>>b[j];
-    vll asum(N+1,0);
-    vll bsum(M+1,0);
-    rep(i,0,N){
-        asum[i+1]=asum[i]+a[i];
+    ll n,m,k;
+    cin>>n>>m>>k;
+    vi a(n),b(m);
+    rep(i,0,n)cin>>a[i];
+    rep(i,0,m)cin>>b[i];
+    vll asum(n+1,0),bsum(m+1,0);
+    rep(i,0,n)asum[i+1]=asum[i]+a[i];
+    rep(i,0,m)bsum[i+1]=bsum[i]+b[i];
+    ll ans=0;
+    rep(i,0,n+1){
+        if(asum[i]>k)break;
+        ll rest=k-asum[i];
+        //asum[i]との和がkを超える要素
+        auto pos=upper_bound(bsum.begin(),bsum.end(),rest);
+        if(pos!=bsum.begin())
+            pos--;
+        if(*pos+asum[i]<=k){
+            chmax(ans,(ll)distance(bsum.begin(),pos)+i);
+        }
     }
-    rep(i,0,M){
-        bsum[i+1]=bsum[i]+b[i];
-    }
-    ll cnt=0;
-    int bi=M;
-    rep(i,0,N+1){
-        ll bup=K-asum[i];
-        while(bi>0&&bsum[bi]+asum[i]>K)bi--;
-        if(bsum[bi]+asum[i]<=K) chmax(cnt,bi+i);
-    }
-    cout<<cnt<<endl;
+    cout<<ans<<endl;
     return 0;
 }
 
